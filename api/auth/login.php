@@ -104,9 +104,9 @@ try {
     error_log(
         'Erro no login: ' .
         $exception->getMessage() .
-        ' em ' .
+        ' | Arquivo: ' .
         $exception->getFile() .
-        ':' .
+        ' | Linha: ' .
         $exception->getLine()
     );
 
@@ -114,6 +114,7 @@ try {
 
     echo json_encode([
         'success' => false,
-        'message' => 'Erro interno ao acessar o banco de dados.'
+        'message' => 'Erro interno ao acessar o banco de dados.',
+        'debug' => $exception->getMessage()
     ]);
 }
