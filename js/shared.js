@@ -203,7 +203,7 @@ function mascaraCPF(el) {
   const digits = el.value.replace(/\D/g, '');
   if (digits.length === 11) {
     erroEl.style.display = validarCPF(digits) ? 'none' : 'inline-block';
-    el.style.borderColor  = validarCPF(digits) ? '' : '#EF4444';
+    el.style.borderColor = validarCPF(digits) ? '' : '#EF4444';
   } else {
     erroEl.style.display = 'none';
     el.style.borderColor = '';
@@ -215,6 +215,31 @@ function validarCPF(cpf) {
   let soma = 0, resto;
   for (let i = 1; i <= 9; i++) soma += parseInt(cpf[i - 1]) * (11 - i);
   resto = (soma * 10) % 11;
+  if ((resto === 10) || (resto === 11)) resto = 0;
+  if (resto !== parseInt(cpf[9])) return false;
+  soma = 0;
+  for (let i = 1; i <= 10; i++) soma += parseInt(cpf[i - 1]) * (12 - i);
+  resto = (soma * 10) % 11;
+  if ((resto === 10) || (resto === 11)) resto = 0;
+  if (resto !== parseInt(cpf[10])) return false;
+  return true;
+}
+
+/* ── MODAL FUNCTIONS ── */
+function openModal(type, ...args) {
+  const f = typeof MODAL_FORMS !== 'undefined' && MODAL_FORMS[type] ? MODAL_FORMS[type](...args) : { title: type, sub: '', html: '' };
+  document.getElementById('modalTitle').textContent = f.title;
+  document.getElementById('modalSub').textContent = f.sub;
+  document.getElementById('modalBody').innerHTML = f.html;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() { const o = document.getElementById('modalOverlay'); if (o) o.classList.remove('open'); }
+function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+function saveModal() { closeModal(); showToast('Salvo com sucesso!'); }
+
+const MODAL_FORMS = {
+  registro: () => ({
     title: 'Novo Registro de Reporte',
     sub: 'Registrar apontamento de horas e horímetro',
     html: `<div class="form-grid">
@@ -246,6 +271,57 @@ function validarCPF(cpf) {
       <div class="form-field"><label class="form-label">Produção (m³)</label><input class="form-input" type="number" id="reg-producao" placeholder="0"/></div>
     </div>`
   }),
+  operador: () => ({
+    title: 'Novo Operador',
+    sub: 'Cadastrar novo operador na plataforma',
+    html: `<div class="form-grid">
+      <div class="form-field"><label class="form-label">Nome completo</label><input class="form-input" placeholder="Ex: João da Silva"/></div>
+      <div class="form-field"><label class="form-label">Cargo / Nível</label><select class="form-select"><option>Operador Sênior</option><option>Operador Pleno</option><option>Operador Júnior</option></select></div>
+      <div class="form-field"><label class="form-label">E-mail</label><input class="form-input" type="email" placeholder="joao@empresa.com"/></div>
+      <div class="form-field"><label class="form-label">Telefone</label><input class="form-input" placeholder="(51) 9 9999-9999"/></div>
+      <div class="form-field"><label class="form-label">CPF</label><input class="form-input" placeholder="000.000.000-00"/></div>
+      <div class="form-field"><label class="form-label">Data admissão</label><input class="form-input" type="date"/></div>
+      <div class="form-field"><label class="form-label">Máquina padrão</label><select class="form-select"><option>— Nenhuma —</option><option>Escavadeira 320D</option><option>Trator TD14</option><option>Motoniveladora GD825</option><option>Compactador CV213</option><option>Retroescavadeira 416F</option></select></div>
+      <div class="form-field"><label class="form-label">Obra vinculada</label><select class="form-select"><option>— Nenhuma —</option><option>OB-001 · Obra Norte</option><option>OB-002 · Pátio Central</option></select></div>
+    </div>`
+  }),
+  maquina: () => ({
+    title: 'Cadastrar Máquina',
+    sub: 'Adicionar nova máquina à frota',
+    html: `<div class="form-grid">
+      <div class="form-field full"><label class="form-label">Nome da máquina</label><input class="form-input" placeholder="Ex: Escavadeira 320D"/></div>
+      <div class="form-field"><label class="form-label">Código / TAG</label><input class="form-input" placeholder="Ex: EX-320D"/></div>
+      <div class="form-field"><label class="form-label">Modelo</label><input class="form-input" placeholder="Ex: Cat 320D"/></div>
+      <div class="form-field"><label class="form-label">Ano de fabricação</label><input class="form-input" type="number" placeholder="2020"/></div>
+      <div class="form-field"><label class="form-label">Horímetro atual</label><input class="form-input" type="number" placeholder="0"/></div>
+      <div class="form-field"><label class="form-label">Consumo médio (L/h)</label><input class="form-input" type="number" step="0.1" placeholder="10.0"/></div>
+      <div class="form-field"><label class="form-label">Status</label><select class="form-select"><option>Em uso</option><option>Manutenção</option><option>Inativa</option></select></div>
+      <div class="form-field"><label class="form-label">Obra vinculada</label><select class="form-select"><option>— Nenhuma —</option><option>OB-001 · Obra Norte</option><option>OB-002 · Pátio Central</option></select></div>
+      <div class="form-field full"><label class="form-label">Observações</label><input class="form-input" placeholder="Informações adicionais..."/></div>
+    </div>`
+  }),
+  obra: () => ({
+    title: 'Cadastrar Nova Obra',
+    sub: 'Preencha os dados para registrar a obra',
+    html: `<div class="form-grid">
+      <div class="form-field full"><label class="form-label">Nome da obra</label><input class="form-input" placeholder="Ex: Obra Norte"/></div>
+      <div class="form-field"><label class="form-label">Código</label><input class="form-input" placeholder="Ex: OB-001"/></div>
+      <div class="form-field"><label class="form-label">Cliente</label><input class="form-input" placeholder="Ex: Construtora A"/></div>
+      <div class="form-field"><label class="form-label">Localização</label><input class="form-input" placeholder="Ex: Rua X, Cidade Y"/></div>
+      <div class="form-field"><label class="form-label">Status</label><select class="form-select"><option>Em andamento</option><option>Concluída</option><option>Paralisada</option></select></div>
+      <div class="form-field"><label class="form-label">Orçamento</label><input class="form-input" type="number" placeholder="0.00"/></div>
+      <div class="form-field"><label class="form-label">Data Início</label><input class="form-input" type="date"/></div>
+      <div class="form-field"><label class="form-label">Previsão Fim</label><input class="form-input" type="date"/></div>
+    </div>`
+  }),
+  vincular: () => ({
+    title: 'Vincular Máquinas e Operadores',
+    sub: 'Selecione os recursos para alocar nesta obra',
+    html: `<div class="form-grid">
+      <div class="form-field full"><label class="form-label">Máquinas Disponíveis</label><select class="form-select" multiple style="height: 100px;"><option>Escavadeira 320D (EX-320D)</option><option>Trator TD14 (TR-14)</option><option>Retroescavadeira 416F (RT-416)</option></select></div>
+      <div class="form-field full"><label class="form-label">Operadores Disponíveis</label><select class="form-select" multiple style="height: 100px;"><option>João da Silva (Op. Sênior)</option><option>Maria Oliveira (Op. Pleno)</option><option>Carlos Souza (Op. Júnior)</option></select></div>
+    </div>`
+  })
 };
 
 /* ?? TOAST ?? */
@@ -368,7 +444,7 @@ async function inicializarModalRegistro() {
   const maqSelect = document.getElementById('reg-maquina-id');
   const dataInput = document.getElementById('reg-data');
   const obraSelect = document.getElementById('reg-obra-id');
-  
+
   if (dataInput) {
     dataInput.value = new Date().toISOString().split('T')[0];
   }
