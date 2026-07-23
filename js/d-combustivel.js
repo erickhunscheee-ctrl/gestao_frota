@@ -29,7 +29,7 @@ async function carregarDadosCombustivel() {
         renderizarGraficoBarras(data.ranking);
 
         // 3. RENDERIZA LISTA DETALHADA
-        renderizarListaMaquinas(data.ranking);
+        renderizarListaMaquinas(data.ranking, k.preco_diesel || 6.50);
 
     } catch (e) { console.error("Erro ao carregar dados de combustível", e); }
 }
@@ -75,7 +75,7 @@ function renderizarGraficoBarras(ranking) {
     });
 }
 
-function renderizarListaMaquinas(ranking) {
+function renderizarListaMaquinas(ranking, precoDiesel = 6.50) {
     const container = document.getElementById('fuel-detail-list');
     container.innerHTML = '';
 
@@ -88,7 +88,7 @@ function renderizarListaMaquinas(ranking) {
 
     ranking.forEach((m, i) => {
         const pct = (m.litros / maxLitros) * 100;
-        const custo = (m.litros * 6.5).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        const custo = (m.litros * precoDiesel).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         
         const row = `
             <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">

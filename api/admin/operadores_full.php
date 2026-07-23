@@ -24,6 +24,8 @@ $queryOps = "SELECT
                 m.nome as maquina_nome,
                 (r.horimetro_final - r.horimetro_inicial) as horas_hoje,
                 ((r.horimetro_final - r.horimetro_inicial) * m.taxa_consumo) as fuel_hoje,
+                (SELECT COALESCE(SUM(rm.horimetro_final - rm.horimetro_inicial), 0) 
+                 FROM registros rm WHERE rm.usuario_id = u.id AND rm.data >= date_trunc('month', CURRENT_DATE)) as horas_mes,
                 CASE WHEN r.id IS NOT NULL THEN 'working' ELSE 'offline' END as status_real
              FROM usuarios u
              LEFT JOIN registros r ON u.id = r.usuario_id AND r.data = CURRENT_DATE

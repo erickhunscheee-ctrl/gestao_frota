@@ -39,6 +39,7 @@ async function carregarTabelaOperadores() {
             const statusTexto = isWorking ? 'Trabalhando' : 'Offline';
 
             const hHoje = parseFloat(op.horas_hoje || 0).toFixed(1);
+            const hMes = parseFloat(op.horas_mes || 0).toFixed(1);
             const fHoje = Math.round(op.fuel_hoje || 0);
             const consumoLh = hHoje > 0 ? (fHoje / hHoje).toFixed(1) : '0.0';
 
@@ -57,7 +58,7 @@ async function carregarTabelaOperadores() {
                     <td><span style="font-weight:600;font-size:12px;">${op.unidade || 'Geral'}</span></td>
                     <td><span class="machine-tag">${op.maquina_nome || '?'}</span></td>
                     <td><strong>${hHoje}h</strong></td>
-                    <td>148h</td>
+                    <td>${hMes}h</td>
                     <td>${op.horimetro_final || '?'}</td>
                     <td>${fHoje} L</td>
                     <td>${consumoLh} L/h</td>

@@ -44,13 +44,13 @@ const SIDEBAR_HTML = `
     <a class="nav-item" href="d-operadores.html" data-page="d-operadores.html" title="Operadores">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 010 7.75"/></svg>
       <span class="nav-item-text">Operadores</span>
-      <span class="nav-badge">8</span>
+      <span class="nav-badge" id="sidebar-badge-operadores">-</span>
     </a>
 
     <a class="nav-item" href="d-maquinas.html" data-page="d-maquinas.html" title="Máquinas">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="14" width="8" height="7" rx="1"/><rect x="9" y="9" width="6" height="12" rx="1"/><rect x="16" y="4" width="6" height="17" rx="1"/></svg>
       <span class="nav-item-text">Máquinas</span>
-      <span class="nav-badge">5</span>
+      <span class="nav-badge" id="sidebar-badge-maquinas">-</span>
     </a>
 
     <div class="nav-section-label">Análise</div>
@@ -75,7 +75,7 @@ const SIDEBAR_HTML = `
     <a class="nav-item" href="d-obras.html" data-page="d-obras.html" title="Obras">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span class="nav-item-text">Obras</span>
-      <span class="nav-badge">3</span>
+      <span class="nav-badge" id="sidebar-badge-obras">-</span>
     </a>
   </nav>
 
@@ -142,6 +142,22 @@ const TOAST_HTML = `
   <span id="toastMsg">Salvo com sucesso!</span>
 </div>`;
 
+async function carregarBadgesSidebar() {
+  try {
+    const res = await fetch('api/admin/sidebar_stats.php');
+    if (!res.ok) return;
+    const data = await res.json();
+    const bOps = document.getElementById('sidebar-badge-operadores');
+    const bMaq = document.getElementById('sidebar-badge-maquinas');
+    const bObr = document.getElementById('sidebar-badge-obras');
+    if (bOps && data.operadores !== undefined) bOps.textContent = data.operadores;
+    if (bMaq && data.maquinas !== undefined) bMaq.textContent = data.maquinas;
+    if (bObr && data.obras !== undefined) bObr.textContent = data.obras;
+  } catch (e) {
+    // Silencioso em páginas que não usam sessão admin
+  }
+}
+
 /* ── INIT: inject sidebar + modal + toast ── */
 document.addEventListener('DOMContentLoaded', () => {
   initSidebarState();
@@ -160,6 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.nav-item[data-page]').forEach(a => {
     if (a.dataset.page === page) a.classList.add('active');
   });
+
+  carregarBadgesSidebar();
 });
 
 /* ?? MÁSCARAS E VALIDAÇÕES ?? */

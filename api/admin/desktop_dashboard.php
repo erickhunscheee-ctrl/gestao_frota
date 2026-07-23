@@ -18,6 +18,7 @@ try {
         SELECT 
             (SELECT COUNT(DISTINCT usuario_id) FROM registros WHERE data = CURRENT_DATE) as ops,
             (SELECT COUNT(*) FROM maquinas WHERE status = 'ativa') as maq,
+            (SELECT COUNT(*) FROM maquinas) as total_maq,
             (SELECT COALESCE(SUM(horimetro_final - horimetro_inicial), 0) FROM registros WHERE data = CURRENT_DATE) as horas,
             (SELECT COALESCE(SUM((r.horimetro_final - r.horimetro_inicial) * m.taxa_consumo), 0) 
              FROM registros r JOIN maquinas m ON r.maquina_id = m.id WHERE r.data = CURRENT_DATE) as litros

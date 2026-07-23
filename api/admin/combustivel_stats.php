@@ -53,7 +53,8 @@ echo json_encode([
         "litros" => round($total_litros, 1),
         "horas" => round($total_horas, 1),
         "media_lh" => $total_horas > 0 ? round($total_litros / $total_horas, 1) : 0,
-        "custo" => round($total_litros * $diesel_preco, 2)
+        "custo" => round($total_litros * $diesel_preco, 2),
+        "preco_diesel" => $diesel_preco
     ],
     "chart" => $chartData,
     "ranking" => $ranking

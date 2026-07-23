@@ -13,17 +13,17 @@
   <div class="topbar">
     <div class="topbar-left">
       <span class="topbar-title">Proje��o da Obra</span>
-      <span class="topbar-sub">Estimativa de conclus�o baseada nas horas trabalhadas</span>
+      <span class="topbar-title">Projeção da Obra</span>
+      <span class="topbar-sub">Estimativa de conclusão baseada nas horas trabalhadas</span>
     </div>
     <div class="topbar-right">
       <div class="date-badge">
         <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Seg, 20 Abr 2026
-      </div>
-      <select class="filter-input" style="height:34px;" onchange="switchObra(this.value)">
-        <option value="ob1">OB-001 � Obra Norte</option>
-        <option value="ob2">OB-002 � P�tio Central</option>
+        <select id="select-obra" class="filter-input" style="height:34px;" onchange="carregarDadosProjecao(this.value)">
+        <option value="">Carregando obras...</option>
       </select>
+      </div>
     </div>
   </div>
 
@@ -34,29 +34,29 @@
 
       <!-- PROJECTION CARD -->
       <div class="projection-card" style="grid-column:1/3;">
-        <div class="proj-title">Proje��o de conclus�o ? Obra Norte (OB-001)</div>
-        <div class="proj-main" id="proj-date">15 Set 2026</div>
-        <div class="proj-sub">Estimativa baseada na m�dia de horas trabalhadas nos �ltimos 14 dias</div>
+        <div class="proj-title" id="proj-card-title">Projeção de conclusão</div>
+        <div class="proj-main" id="proj-date">--/--/----</div>
+        <div class="proj-sub">Estimativa baseada na média de horas trabalhadas nos últimos 14 dias</div>
 
         <div class="proj-metrics">
-          <div class="proj-metric"><div class="proj-m-label">Horas trabalhadas</div><div class="proj-m-value" id="proj-done">1.280<span>h</span></div></div>
-          <div class="proj-metric"><div class="proj-m-label">Meta total da obra</div><div class="proj-m-value" id="proj-meta">4.800<span>h</span></div></div>
-          <div class="proj-metric"><div class="proj-m-label">Horas restantes</div><div class="proj-m-value" id="proj-remain">3.520<span>h</span></div></div>
-          <div class="proj-metric"><div class="proj-m-label">M�dia di�ria atual</div><div class="proj-m-value" id="proj-daily">64<span>h/dia</span></div></div>
-          <div class="proj-metric"><div class="proj-m-label">Dias restantes est.</div><div class="proj-m-value" id="proj-days">55<span>dias</span></div></div>
-          <div class="proj-metric"><div class="proj-m-label">Custo combust�vel est.</div><div class="proj-m-value" id="proj-fuel">R$<span> 154k</span></div></div>
+          <div class="proj-metric"><div class="proj-m-label">Horas trabalhadas</div><div class="proj-m-value" id="proj-done">0<span>h</span></div></div>
+          <div class="proj-metric"><div class="proj-m-label">Meta total da obra</div><div class="proj-m-value" id="proj-meta">0<span>h</span></div></div>
+          <div class="proj-metric"><div class="proj-m-label">Horas restantes</div><div class="proj-m-value" id="proj-remain">0<span>h</span></div></div>
+          <div class="proj-metric"><div class="proj-m-label">Média diária atual</div><div class="proj-m-value" id="proj-daily">0<span>h/dia</span></div></div>
+          <div class="proj-metric"><div class="proj-m-label">Dias restantes est.</div><div class="proj-m-value" id="proj-days">0<span>dias</span></div></div>
+          <div class="proj-metric"><div class="proj-m-label">Custo combustível est.</div><div class="proj-m-value" id="proj-fuel">R$<span> 0k</span></div></div>
         </div>
 
         <div class="proj-bar-wrap">
           <div class="proj-bar-label">
-            <span>In�cio: 01 Jan 2026</span>
-            <span id="proj-pct-label">Hoje: 26.7% conclu�do</span>
-            <span id="proj-date-label">Previs�o: 15 Set 2026</span>
+            <span id="proj-start-label">Início: --/--/----</span>
+            <span id="proj-pct-label">Hoje: 0% concluído</span>
+            <span id="proj-date-label">Previsão: --/--/----</span>
           </div>
           <div class="proj-bar-track">
             <div style="display:flex;height:100%;">
-              <div class="proj-bar-fill" id="proj-bar-done" style="width:26.7%"></div>
-              <div class="proj-bar-fill projected" style="width:73.3%"></div>
+              <div class="proj-bar-fill" id="proj-bar-done" style="width:0%"></div>
+              <div class="proj-bar-fill projected" id="proj-bar-proj" style="width:100%"></div>
             </div>
           </div>
         </div>
@@ -65,41 +65,41 @@
       <!-- SCENARIOS -->
       <div class="card">
         <div class="card-header">
-          <div><div class="card-title">Cen�rios de prazo</div><div class="card-sub">Varia��o na m�dia di�ria</div></div>
+          <div><div class="card-title">Cenários de prazo</div><div class="card-sub">Variação na média diária</div></div>
         </div>
         <div class="card-body">
           <div style="display:flex;flex-direction:column;gap:16px;">
             <div>
               <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
                 <span style="font-size:12px;font-weight:600;color:var(--green-main)">Otimista (+20%)</span>
-                <span style="font-size:12px;font-weight:700;" id="sc-opt">20 Jul 2026</span>
+                <span style="font-size:12px;font-weight:700;" id="sc-opt">--/--/----</span>
               </div>
               <div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;"><div style="width:60%;height:100%;background:var(--green-main);border-radius:3px;"></div></div>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="sc-opt-sub">76.8h/dia � 46 dias</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="sc-opt-sub">0h/dia · 0 dias</div>
             </div>
             <div>
               <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-                <span style="font-size:12px;font-weight:600;color:var(--blue)">Atual (64h/dia)</span>
-                <span style="font-size:12px;font-weight:700;" id="sc-cur">15 Set 2026</span>
+                <span style="font-size:12px;font-weight:600;color:var(--blue)">Atual</span>
+                <span style="font-size:12px;font-weight:700;" id="sc-cur">--/--/----</span>
               </div>
               <div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;"><div style="width:45%;height:100%;background:var(--blue);border-radius:3px;"></div></div>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="sc-cur-sub">64h/dia � 55 dias</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="sc-cur-sub">0h/dia · 0 dias</div>
             </div>
             <div>
               <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
                 <span style="font-size:12px;font-weight:600;color:var(--amber)">Moderado (-10%)</span>
-                <span style="font-size:12px;font-weight:700;" id="sc-mod">05 Out 2026</span>
+                <span style="font-size:12px;font-weight:700;" id="sc-mod">--/--/----</span>
               </div>
               <div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;"><div style="width:35%;height:100%;background:var(--amber);border-radius:3px;"></div></div>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="sc-mod-sub">57.6h/dia � 61 dias</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="sc-mod-sub">0h/dia · 0 dias</div>
             </div>
             <div>
               <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
                 <span style="font-size:12px;font-weight:600;color:var(--red)">Pessimista (-25%)</span>
-                <span style="font-size:12px;font-weight:700;" id="sc-pes">18 Nov 2026</span>
+                <span style="font-size:12px;font-weight:700;" id="sc-pes">--/--/----</span>
               </div>
               <div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;"><div style="width:22%;height:100%;background:var(--red);border-radius:3px;"></div></div>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="sc-pes-sub">48h/dia � 73 dias</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="sc-pes-sub">0h/dia · 0 dias</div>
             </div>
           </div>
         </div>
@@ -110,11 +110,11 @@
     <!-- CHARTS ROW -->
     <div class="grid-2">
       <div class="card">
-        <div class="card-header"><div class="card-title">Evolu��o de horas acumuladas</div><div class="card-sub">Real vs projetado vs meta</div></div>
+        <div class="card-header"><div class="card-title">Evolução de horas acumuladas</div><div class="card-sub">Real vs projetado vs meta</div></div>
         <div class="card-body"><canvas id="progressChart" height="220"></canvas></div>
       </div>
       <div class="card">
-        <div class="card-header"><div class="card-title">Horas por m�quina ? acumulado do m�s</div></div>
+        <div class="card-header"><div class="card-title">Horas por máquina na obra</div></div>
         <div class="card-body"><canvas id="machineHoursChart" height="220"></canvas></div>
       </div>
     </div>
@@ -122,29 +122,29 @@
     <!-- CALCULATOR -->
     <div class="card" style="margin-top:18px;">
       <div class="card-header">
-        <div><div class="card-title">Par�metros da obra</div><div class="card-sub">Edite para recalcular a proje��o em tempo real</div></div>
+        <div><div class="card-title">Parâmetros da obra</div><div class="card-sub">Edite para recalcular a projeção em tempo real</div></div>
       </div>
       <div class="card-body">
         <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:16px;">
           <div class="form-field">
             <label class="form-label">Meta de horas total</label>
-            <input class="form-input" type="number" value="4800" id="p-meta" oninput="calcProjection()">
+            <input class="form-input" type="number" value="1000" id="p-meta" oninput="calcProjection()">
           </div>
           <div class="form-field">
             <label class="form-label">Horas acumuladas</label>
-            <input class="form-input" type="number" value="1280" id="p-done" oninput="calcProjection()">
+            <input class="form-input" type="number" value="0" id="p-done" oninput="calcProjection()">
           </div>
           <div class="form-field">
-            <label class="form-label">M�dia di�ria (h/dia)</label>
-            <input class="form-input" type="number" value="64" id="p-daily" oninput="calcProjection()">
+            <label class="form-label">Média diária (h/dia)</label>
+            <input class="form-input" type="number" value="8" id="p-daily" oninput="calcProjection()">
           </div>
           <div class="form-field">
             <label class="form-label">Custo diesel (R$/L)</label>
             <input class="form-input" type="number" value="6.50" step="0.01" id="p-price" oninput="calcProjection()">
           </div>
           <div class="form-field">
-            <label class="form-label">Consumo m�dio (L/h)</label>
-            <input class="form-input" type="number" value="4.9" step="0.1" id="p-lh" oninput="calcProjection()">
+            <label class="form-label">Consumo médio (L/h)</label>
+            <input class="form-input" type="number" value="5.0" step="0.1" id="p-lh" oninput="calcProjection()">
           </div>
           <div class="form-field" style="justify-content:flex-end;">
             <label class="form-label">&nbsp;</label>
@@ -157,11 +157,11 @@
 
         <!-- Result bar -->
         <div style="padding:16px 20px;background:var(--green-pale);border:1px solid var(--green-light);border-radius:var(--radius-md);display:flex;gap:32px;flex-wrap:wrap;align-items:center;">
-          <div><div style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">Previs�o de conclus�o</div><div style="font-size:22px;font-weight:800;color:var(--green-dark);" id="r-date">15 Set 2026</div></div>
-          <div><div style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">Dias restantes</div><div style="font-size:22px;font-weight:800;color:var(--green-dark);" id="r-days">55</div></div>
-          <div><div style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">Horas restantes</div><div style="font-size:22px;font-weight:800;color:var(--green-dark);" id="r-hours">3.520h</div></div>
-          <div><div style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">% conclu�do</div><div style="font-size:22px;font-weight:800;color:var(--green-dark);" id="r-pct">26.7%</div></div>
-          <div><div style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">Custo combust�vel est.</div><div style="font-size:22px;font-weight:800;color:var(--green-dark);" id="r-cost">R$ 154.560</div></div>
+          <div><div style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">Previsão de conclusão</div><div style="font-size:22px;font-weight:800;color:var(--green-dark);" id="r-date">--/--/----</div></div>
+          <div><div style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">Dias restantes</div><div style="font-size:22px;font-weight:800;color:var(--green-dark);" id="r-days">0</div></div>
+          <div><div style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">Horas restantes</div><div style="font-size:22px;font-weight:800;color:var(--green-dark);" id="r-hours">0h</div></div>
+          <div><div style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">% concluído</div><div style="font-size:22px;font-weight:800;color:var(--green-dark);" id="r-pct">0%</div></div>
+          <div><div style="font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">Custo combustível est.</div><div style="font-size:22px;font-weight:800;color:var(--green-dark);" id="r-cost">R$ 0</div></div>
         </div>
       </div>
     </div>
@@ -174,37 +174,109 @@
   Chart.defaults.font.family = "'Montserrat', sans-serif";
   Chart.defaults.font.size   = 11;
 
-  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set'];
+  let progressChartInstance = null;
+  let machineChartInstance = null;
 
-  new Chart(document.getElementById('progressChart'), {
-    type: 'line',
-    data: {
-      labels: months,
-      datasets: [
-        { label:'Real',     data:[0,240,480,1280,null,null,null,null,null], borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.08)', fill:true, tension:0.3, pointBackgroundColor:'#1D9E75', pointRadius:4 },
-        { label:'Proje��o', data:[0,240,480,1280,2560,3520,4160,4640,4800], borderColor:'rgba(29,158,117,0.35)', borderDash:[5,4], fill:false, tension:0.3, pointBackgroundColor:'rgba(29,158,117,0.35)', pointRadius:3 },
-        { label:'Meta',     data:[4800,4800,4800,4800,4800,4800,4800,4800,4800], borderColor:'#EF4444', borderDash:[3,3], fill:false, pointRadius:0 }
-      ]
-    },
-    options: {
-      responsive:true,
-      plugins:{ legend:{ position:'bottom', labels:{ color:'#6b7270', boxWidth:10, padding:12 } } },
-      scales:{ x:{ grid:{display:false}, ticks:{color:'#6b7270'} }, y:{ grid:{color:'#f0f4f2'}, ticks:{color:'#6b7270'}, max:5200 } }
+  document.addEventListener('DOMContentLoaded', async () => {
+    const user = await verificarSessao();
+    if (user.cargo !== 'admin') {
+      window.location.href = 'maquinas.html';
+      return;
     }
+    carregarDadosProjecao();
   });
 
-  new Chart(document.getElementById('machineHoursChart'), {
-    type: 'bar',
-    data: {
-      labels:['Escavadeira 320D','Trator TD14','Motoniveladora','Compactador','Retroescavadeira'],
-      datasets:[{ label:'Horas no m�s', data:[148,132,125,110,98], backgroundColor:['#1D9E75','#0F6E56','#F59E0B','#3B82F6','#8B5CF6'], borderRadius:5, borderSkipped:false }]
-    },
-    options: {
-      indexAxis:'y', responsive:true,
-      plugins:{ legend:{display:false} },
-      scales:{ x:{ grid:{color:'#f0f4f2'}, ticks:{color:'#6b7270'} }, y:{ grid:{display:false}, ticks:{color:'#6b7270'} } }
+  async function carregarDadosProjecao(obraId = null) {
+    try {
+      const url = obraId ? `api/admin/projecao_stats.php?obra_id=${obraId}` : 'api/admin/projecao_stats.php';
+      const res = await fetch(url);
+      const data = await res.json();
+
+      // 1. Popula dropdown de obras
+      const select = document.getElementById('select-obra');
+      if (select && data.obras) {
+        select.innerHTML = data.obras.map(o => `
+          <option value="${o.id}" ${o.id == data.selected_id ? 'selected' : ''}>
+            ${o.codigo || 'OB'} — ${o.nome}
+          </option>
+        `).join('');
+      }
+
+      if (!data.obra) return;
+
+      const obra = data.obra;
+      const meta = parseFloat(obra.meta_horas) || 1000;
+      const done = parseFloat(data.horas_realizadas) || 0;
+      const daily = parseFloat(data.media_diaria) || 8;
+
+      document.getElementById('proj-card-title').textContent = `Projeção de conclusão — ${obra.nome} (${obra.codigo || ''})`;
+      if (obra.data_inicio) {
+        const dIni = new Date(obra.data_inicio);
+        document.getElementById('proj-start-label').textContent = `Início: ${fmtDate(dIni)}`;
+      }
+
+      document.getElementById('p-meta').value = meta;
+      document.getElementById('p-done').value = done;
+      document.getElementById('p-daily').value = daily;
+
+      calcProjection(false);
+
+      // Renderiza gráficos
+      renderCharts(data);
+
+    } catch (e) {
+      console.error("Erro ao carregar dados da projeção", e);
     }
-  });
+  }
+
+  function renderCharts(data) {
+    // 1. Gráfico de progresso
+    const pCtx = document.getElementById('progressChart').getContext('2d');
+    if (progressChartInstance) progressChartInstance.destroy();
+
+    const monthly = data.monthly_progress || [];
+    const labels = monthly.length > 0 ? monthly.map(m => m.mes) : ['Mês 1', 'Mês 2', 'Mês 3'];
+    const realData = monthly.length > 0 ? monthly.map(m => parseFloat(m.horas)) : [0];
+    const metaVal = parseFloat(data.obra?.meta_horas || 1000);
+
+    progressChartInstance = new Chart(pCtx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          { label:'Real (Acumulado)', data: realData, borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.08)', fill:true, tension:0.3, pointBackgroundColor:'#1D9E75', pointRadius:4 },
+          { label:'Meta', data: labels.map(() => metaVal), borderColor:'#EF4444', borderDash:[3,3], fill:false, pointRadius:0 }
+        ]
+      },
+      options: {
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{ legend:{ position:'bottom', labels:{ color:'#6b7270', boxWidth:10, padding:12 } } },
+        scales:{ x:{ grid:{display:false}, ticks:{color:'#6b7270'} }, y:{ grid:{color:'#f0f4f2'}, ticks:{color:'#6b7270'}, beginAtZero:true } }
+      }
+    });
+
+    // 2. Gráfico de horas por máquina
+    const mCtx = document.getElementById('machineHoursChart').getContext('2d');
+    if (machineChartInstance) machineChartInstance.destroy();
+
+    const mHours = data.machine_hours || [];
+    const mLabels = mHours.length > 0 ? mHours.map(m => `${m.nome} (${m.codigo_tag})`) : ['Nenhuma máquina vinculada'];
+    const mData = mHours.length > 0 ? mHours.map(m => parseFloat(m.horas)) : [0];
+
+    machineChartInstance = new Chart(mCtx, {
+      type: 'bar',
+      data: {
+        labels: mLabels,
+        datasets:[{ label:'Horas acumuladas', data: mData, backgroundColor:['#1D9E75','#0F6E56','#F59E0B','#3B82F6','#8B5CF6'], borderRadius:5 }]
+      },
+      options: {
+        indexAxis:'y', responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false} },
+        scales:{ x:{ grid:{color:'#f0f4f2'}, ticks:{color:'#6b7270'}, beginAtZero:true }, y:{ grid:{display:false}, ticks:{color:'#6b7270'} } }
+      }
+    });
+  }
 
   function addDays(base, d) {
     const dt = new Date(base);
@@ -216,38 +288,40 @@
     return dt.toLocaleDateString('pt-BR', { day:'numeric', month:'short', year:'numeric' });
   }
 
-  // Override shared calcProjection with a richer version that also updates scenarios
-  function calcProjection() {
-    const meta  = parseFloat(document.getElementById('p-meta').value)  || 4800;
-    const done  = parseFloat(document.getElementById('p-done').value)  || 1280;
-    const daily = parseFloat(document.getElementById('p-daily').value) || 64;
+  function calcProjection(notify = true) {
+    const meta  = parseFloat(document.getElementById('p-meta').value)  || 1000;
+    const done  = parseFloat(document.getElementById('p-done').value)  || 0;
+    const daily = parseFloat(document.getElementById('p-daily').value) || 8;
     const price = parseFloat(document.getElementById('p-price').value) || 6.5;
-    const lh    = parseFloat(document.getElementById('p-lh').value)    || 4.9;
+    const lh    = parseFloat(document.getElementById('p-lh').value)    || 5.0;
 
-    const remaining = meta - done;
-    const pct       = ((done / meta) * 100).toFixed(1);
+    const remaining = Math.max(0, meta - done);
+    const pct       = meta > 0 ? Math.min(100, (done / meta) * 100).toFixed(1) : '0.0';
     const fuelCost  = Math.round(remaining * lh * price);
-    const today     = new Date('2026-04-20');
+    const today     = new Date();
 
     // Main
-    const daysMain = Math.ceil(remaining / daily);
-    document.getElementById('r-date').textContent  = fmtDate(addDays(today, daysMain));
+    const daysMain = daily > 0 ? Math.ceil(remaining / daily) : 0;
+    const targetDate = addDays(today, daysMain);
+
+    document.getElementById('r-date').textContent  = fmtDate(targetDate);
     document.getElementById('r-days').textContent  = daysMain;
     document.getElementById('r-hours').textContent = remaining.toLocaleString('pt-BR') + 'h';
     document.getElementById('r-pct').textContent   = pct + '%';
     document.getElementById('r-cost').textContent  = 'R$ ' + fuelCost.toLocaleString('pt-BR');
 
     // Hero projection card
-    document.getElementById('proj-date').textContent      = fmtDate(addDays(today, daysMain));
+    document.getElementById('proj-date').textContent      = fmtDate(targetDate);
     document.getElementById('proj-done').innerHTML        = done.toLocaleString('pt-BR') + '<span>h</span>';
     document.getElementById('proj-meta').innerHTML        = meta.toLocaleString('pt-BR') + '<span>h</span>';
     document.getElementById('proj-remain').innerHTML      = remaining.toLocaleString('pt-BR') + '<span>h</span>';
-    document.getElementById('proj-daily').innerHTML       = daily + '<span>h/dia</span>';
+    document.getElementById('proj-daily').innerHTML       = daily.toFixed(1) + '<span>h/dia</span>';
     document.getElementById('proj-days').innerHTML        = daysMain + '<span>dias</span>';
     document.getElementById('proj-fuel').innerHTML        = 'R$<span> ' + Math.round(fuelCost/1000) + 'k</span>';
-    document.getElementById('proj-pct-label').textContent = 'Hoje: ' + pct + '% conclu�do';
-    document.getElementById('proj-date-label').textContent= 'Previs�o: ' + fmtDate(addDays(today, daysMain));
+    document.getElementById('proj-pct-label').textContent = 'Hoje: ' + pct + '% concluído';
+    document.getElementById('proj-date-label').textContent= 'Previsão: ' + fmtDate(targetDate);
     document.getElementById('proj-bar-done').style.width  = pct + '%';
+    document.getElementById('proj-bar-proj').style.width  = (100 - pct) + '%';
 
     // Scenarios
     const sc = [
@@ -258,27 +332,16 @@
     ];
 
     sc.forEach(s => {
-      const d2 = Math.ceil(remaining / (daily * s.mult));
-      document.getElementById(s.id).textContent   = fmtDate(addDays(today, d2));
-      document.getElementById(s.sub).textContent  = (daily * s.mult).toFixed(1) + 'h/dia � ' + d2 + ' dias';
+      const d2 = (daily * s.mult) > 0 ? Math.ceil(remaining / (daily * s.mult)) : 0;
+      const elDate = document.getElementById(s.id);
+      const elSub = document.getElementById(s.sub);
+      if (elDate) elDate.textContent = fmtDate(addDays(today, d2));
+      if (elSub) elSub.textContent = (daily * s.mult).toFixed(1) + 'h/dia · ' + d2 + ' dias';
     });
 
-    showToast('Proje��o recalculada!');
-  }
-
-  function switchObra(val) {
-    if (val === 'ob2') {
-      document.getElementById('p-meta').value  = 5000;
-      document.getElementById('p-done').value  = 920;
-      document.getElementById('p-daily').value = 55;
-      document.querySelector('.proj-title').textContent = 'Proje��o de conclus�o ? P�tio Central (OB-002)';
-    } else {
-      document.getElementById('p-meta').value  = 4800;
-      document.getElementById('p-done').value  = 1280;
-      document.getElementById('p-daily').value = 64;
-      document.querySelector('.proj-title').textContent = 'Proje��o de conclus�o ? Obra Norte (OB-001)';
+    if (notify && typeof showToast === 'function') {
+      showToast('Projeção recalculada!');
     }
-    calcProjection();
   }
 </script>
 </body>
