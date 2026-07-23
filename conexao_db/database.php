@@ -2,11 +2,12 @@
 
 class Database
 {
-    private $host = 'db.jgcafvpavrertzzjaoot.supabase.co';
-    private $db_name   = 'postgres';
-    private $username = 'postgres';
-    private $password = '7VS2JvnsE3oofLPK';
-    private $port = '5432';
+    private $host = getenv('DB_HOST');
+    private $db_name = getenv('DB_DATABASE');
+    private $username = getenv('DB_USERNAME');
+    private $password = getenv('DB_PASSWORD');
+    private $port = getenv('DB_PORT');
+
     public $conn;
 
     public function getConnection()

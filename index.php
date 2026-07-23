@@ -1,0 +1,1 @@
+echo 'Gestão de Frota funcionando na VPS!';
