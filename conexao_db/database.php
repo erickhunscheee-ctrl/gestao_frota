@@ -11,7 +11,7 @@ class Database
     public function __construct()
     {
         $this->host = getenv('DB_HOST') ?: '';
-        $this->db_name = getenv('DB_DATABASE') ?: '';
+        $this->db_name = getenv('DB_DATABASE') ?: 'postgres';
         $this->username = getenv('DB_USERNAME') ?: '';
         $this->password = getenv('DB_PASSWORD') ?: '';
         $this->port = getenv('DB_PORT') ?: '5432';
@@ -23,16 +23,16 @@ class Database
             throw new RuntimeException('DB_HOST não configurado.');
         }
 
-        if ($this->db_name === '') {
-            throw new RuntimeException('DB_DATABASE não configurado.');
-        }
-
         if ($this->username === '') {
             throw new RuntimeException('DB_USERNAME não configurado.');
         }
 
+        if ($this->password === '') {
+            throw new RuntimeException('DB_PASSWORD não configurado.');
+        }
+
         $dsn = sprintf(
-            'pgsql:host=%s;port=%s;dbname=%s',
+            'pgsql:host=%s;port=%s;dbname=%s;sslmode=require',
             $this->host,
             $this->port,
             $this->db_name

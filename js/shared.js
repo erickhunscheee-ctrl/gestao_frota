@@ -1,5 +1,20 @@
+//Sidebar, modal, toast e utilitarios compartilhados
 
-//Sidebar, modal, toast e utilitaios compartilhados
+function toggleSidebar() {
+  const isCollapsed = document.body.classList.toggle('sidebar-collapsed');
+  localStorage.setItem('sidebar_collapsed', isCollapsed ? 'true' : 'false');
+}
+
+function initSidebarState() {
+  if (localStorage.getItem('sidebar_collapsed') === 'true') {
+    document.body.classList.add('sidebar-collapsed');
+  }
+}
+
+// Restaura o estado da sidebar o quanto antes
+if (document.body) {
+  initSidebarState();
+}
 
 const SIDEBAR_HTML = `
 <aside class="sidebar">
@@ -11,56 +26,61 @@ const SIDEBAR_HTML = `
       <span class="brand-name">Verda</span>
       <span class="brand-role">Admin</span>
     </div>
+    <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Recolher / Expandir Menu">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
   </div>
 
   <nav class="sidebar-nav">
     <div class="nav-section-label">Principal</div>
 
-    <a class="nav-item" href="d-dashboard.html" data-page="d-dashboard.html">
+    <a class="nav-item" href="d-dashboard.html" data-page="d-dashboard.html" title="Visão Geral">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Visão Geral
+      <span class="nav-item-text">Visão Geral</span>
     </a>
 
-    <a class="nav-item" href="d-operadores.html" data-page="d-operadores.html">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-      Operadores
+    <a class="nav-item" href="d-operadores.html" data-page="d-operadores.html" title="Operadores">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 010 7.75"/></svg>
+      <span class="nav-item-text">Operadores</span>
       <span class="nav-badge">8</span>
     </a>
 
-    <a class="nav-item" href="d-maquinas.html" data-page="d-maquinas.html">
+    <a class="nav-item" href="d-maquinas.html" data-page="d-maquinas.html" title="Máquinas">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="14" width="8" height="7" rx="1"/><rect x="9" y="9" width="6" height="12" rx="1"/><rect x="16" y="4" width="6" height="17" rx="1"/></svg>
-      Máquinas
+      <span class="nav-item-text">Máquinas</span>
       <span class="nav-badge">5</span>
     </a>
 
     <div class="nav-section-label">Análise</div>
 
-    <a class="nav-item" href="d-registros.html" data-page="d-registros.html">
+    <a class="nav-item" href="d-registros.html" data-page="d-registros.html" title="Registros / Dias">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-      Registros / Dias
+      <span class="nav-item-text">Registros / Dias</span>
     </a>
 
-    <a class="nav-item" href="d-combustivel.html" data-page="d-combustivel.html">
+    <a class="nav-item" href="d-combustivel.html" data-page="d-combustivel.html" title="Combustível">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.4 5M17 13l1.4 5M9 18h6"/></svg>
-      Combustível
+      <span class="nav-item-text">Combustível</span>
     </a>
 
-    <a class="nav-item" href="d-projecao.html" data-page="d-projecao.html">
+    <a class="nav-item" href="d-projecao.html" data-page="d-projecao.html" title="Projeção da Obra">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      Projeção da Obra
+      <span class="nav-item-text">Projeção da Obra</span>
     </a>
 
     <div class="nav-section-label">Gestão</div>
 
-    <a class="nav-item" href="d-obras.html" data-page="d-obras.html">
+    <a class="nav-item" href="d-obras.html" data-page="d-obras.html" title="Obras">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Obras
+      <span class="nav-item-text">Obras</span>
       <span class="nav-badge">3</span>
     </a>
   </nav>
 
   <div class="sidebar-user">
-    <div class="user-avatar">AD</div>
+    <div class="user-avatar" title="Administrador (admin@verda.com)">AD</div>
     <div class="user-info">
       <div class="user-name">Administrador</div>
       <div class="user-role">admin@verda.com</div>
@@ -68,14 +88,21 @@ const SIDEBAR_HTML = `
   </div>
 </aside>`;
 
-/* ?? TOPBAR HTML ?? */
+/* ── TOPBAR HTML ── */
 function TOPBAR_HTML(title, sub, btns = '') {
   const today = new Intl.DateTimeFormat('pt-BR', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }).format(new Date());
   return `
   <div class="topbar">
     <div class="topbar-left">
-      <span class="topbar-title">${title}</span>
-      <span class="topbar-sub">${sub}</span>
+      <button class="topbar-toggle-btn" onclick="toggleSidebar()" title="Recolher / Expandir Menu">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+      <div class="topbar-titles">
+        <span class="topbar-title">${title}</span>
+        <span class="topbar-sub">${sub}</span>
+      </div>
     </div>
     <div class="topbar-right">
       <div class="date-badge">
@@ -87,7 +114,7 @@ function TOPBAR_HTML(title, sub, btns = '') {
   </div>`;
 }
 
-/* ?? MODAL HTML ?? */
+/* ── MODAL HTML ── */
 const MODAL_HTML = `
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
   <div class="modal-box" id="modalBox">
@@ -108,15 +135,17 @@ const MODAL_HTML = `
   </div>
 </div>`;
 
-/* ?? TOAST HTML ?? */
+/* ── TOAST HTML ── */
 const TOAST_HTML = `
 <div class="toast" id="toast">
   <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
   <span id="toastMsg">Salvo com sucesso!</span>
 </div>`;
 
-/* ?? INIT: inject sidebar + modal + toast ?? */
+/* ── INIT: inject sidebar + modal + toast ── */
 document.addEventListener('DOMContentLoaded', () => {
+  initSidebarState();
+
   // Inject sidebar before the <main>
   const main = document.querySelector('main.main');
   if (main) {
