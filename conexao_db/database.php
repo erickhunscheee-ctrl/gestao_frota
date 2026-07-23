@@ -2,36 +2,42 @@
 
 class Database
 {
-    private $host;
-    private $db_name;
-    private $username;
-    private $password;
-    private $port;
-
-    public $conn;
+    private string $host;
+    private string $db_name;
+    private string $username;
+    private string $password;
+    private string $port;
 
     public function __construct()
     {
-        $this->host = getenv('DB_HOST') ?: 'localhost';
-        $this->db_name = getenv('DB_DATABASE') ?: 'gestao_frota';
-        $this->username = getenv('DB_USERNAME') ?: 'postgres';
+        $this->host = getenv('DB_HOST') ?: '';
+        $this->db_name = getenv('DB_DATABASE') ?: '';
+        $this->username = getenv('DB_USERNAME') ?: '';
         $this->password = getenv('DB_PASSWORD') ?: '';
         $this->port = getenv('DB_PORT') ?: '5432';
     }
 
-    public function getConnection()
+    public function getConnection(): PDO
     {
-        $this->conn = null;
+        if (
+            empty($this->host) ||
+            empty($this->db_name) ||
+            empty($this->username)
+        ) {
+            throw new RuntimeException(
+                'Variáveis do banco não foram configuradas corretamente.'
+            );
+        }
+
+        $dsn = sprintf(
+            'pgsql:host=%s;port=%s;dbname=%s',
+            $this->host,
+            $this->port,
+            $this->db_name
+        );
 
         try {
-            $dsn = sprintf(
-                'pgsql:host=%s;port=%s;dbname=%s',
-                $this->host,
-                $this->port,
-                $this->db_name
-            );
-
-            $this->conn = new PDO(
+            return new PDO(
                 $dsn,
                 $this->username,
                 $this->password,
@@ -42,11 +48,15 @@ class Database
                 ]
             );
         } catch (PDOException $exception) {
-            error_log('Erro de conexão com o PostgreSQL: ' . $exception->getMessage());
+            error_log(
+                'Erro PostgreSQL: ' . $exception->getMessage()
+            );
 
-            echo 'Erro de conexão com o banco de dados.';
+            throw new RuntimeException(
+                'Não foi possível conectar ao banco de dados.',
+                0,
+                $exception
+            );
         }
-
-        return $this->conn;
     }
 }

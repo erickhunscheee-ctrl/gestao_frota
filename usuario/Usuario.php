@@ -1,11 +1,11 @@
+```php
 <?php
 
 class Usuario
 {
-    private $conn;
-    private $table_name = "usuarios";
+    private PDO $conn;
+    private string $table_name = 'usuarios';
 
-    // Propriedades
     public $id;
     public $nome;
     public $email;
@@ -21,116 +21,243 @@ class Usuario
 
     public function __construct($db)
     {
+        if (!$db instanceof PDO) {
+            throw new RuntimeException(
+                'A conexão com o banco de dados não está disponível.'
+            );
+        }
+
         $this->conn = $db;
     }
 
-    public function create()
+    public function create(): bool
     {
-        $query = "INSERT INTO " . $this->table_name . " 
-                (nome, email, senha, cargo, iniciais, cor_avatar, telefone, empresa, unidade, cep, cidade) 
-                VALUES (:nome, :email, :senha, :cargo, :iniciais, :cor_avatar, :telefone, :empresa, :unidade, :cep, :cidade)";
+        $query = "
+            INSERT INTO {$this->table_name}
+            (
+                nome,
+                email,
+                senha,
+                cargo,
+                iniciais,
+                cor_avatar,
+                telefone,
+                empresa,
+                unidade,
+                cep,
+                cidade
+            )
+            VALUES
+            (
+                :nome,
+                :email,
+                :senha,
+                :cargo,
+                :iniciais,
+                :cor_avatar,
+                :telefone,
+                :empresa,
+                :unidade,
+                :cep,
+                :cidade
+            )
+        ";
 
         $stmt = $this->conn->prepare($query);
-        $senha_hash = password_hash($this->senha, PASSWORD_BCRYPT);
 
-        $stmt->bindParam(":nome", $this->nome);
-        $stmt->bindParam(":email", $this->email);
-        $stmt->bindParam(":senha", $senha_hash);
-        $stmt->bindParam(":cargo", $this->cargo);
-        $stmt->bindParam(":iniciais", $this->iniciais);
-        $stmt->bindParam(":cor_avatar", $this->cor_avatar);
-        $stmt->bindParam(":telefone", $this->telefone);
-        $stmt->bindParam(":empresa", $this->empresa);
-        $stmt->bindParam(":unidade", $this->unidade);
-        $stmt->bindParam(":cep", $this->cep);
-        $stmt->bindParam(":cidade", $this->cidade);
+        $senhaHash = password_hash($this->senha, PASSWORD_BCRYPT);
 
-        return $stmt->execute();
+        return $stmt->execute([
+            ':nome' => $this->nome,
+            ':email' => $this->email,
+            ':senha' => $senhaHash,
+            ':cargo' => $this->cargo,
+            ':iniciais' => $this->iniciais,
+            ':cor_avatar' => $this->cor_avatar,
+            ':telefone' => $this->telefone,
+            ':empresa' => $this->empresa,
+            ':unidade' => $this->unidade,
+            ':cep' => $this->cep,
+            ':cidade' => $this->cidade,
+        ]);
     }
 
-    // READ ALL: Para listagem no admin-operadores.html
-    public function readAll()
+    public function readAll(): PDOStatement
     {
-        $query = "SELECT * FROM " . $this->table_name . " ORDER BY nome ASC";
+        $query = "
+            SELECT *
+            FROM {$this->table_name}
+            ORDER BY nome ASC
+        ";
+
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
+
         return $stmt;
     }
 
-    // READ ONE: Para perfil.html ou edicao
     public function readOne($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
+        $query = "
+            SELECT *
+            FROM {$this->table_name}
+            WHERE id = :id
+            LIMIT 1
+        ";
+
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":id", $id);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $stmt->execute([
+            ':id' => $id,
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: false;
     }
 
-    // UPDATE: Editar perfil
-    public function update()
+    public function update(): bool
     {
-        $query = "UPDATE " . $this->table_name . " SET 
-                    nome = :nome, 
-                    email = :email, 
-                    cargo = :cargo,
-                    telefone = :telefone, 
-                    unidade = :unidade,
-                    cep = :cep,
-                    cidade = :cidade
-                  WHERE id = :id";
+        $query = "
+            UPDATE {$this->table_name}
+            SET
+                nome = :nome,
+                email = :email,
+                cargo = :cargo,
+                telefone = :telefone,
+                unidade = :unidade,
+                cep = :cep,
+                cidade = :cidade
+            WHERE id = :id
+        ";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":nome", $this->nome);
-        $stmt->bindParam(":email", $this->email);
-        $stmt->bindParam(":cargo", $this->cargo);
-        $stmt->bindParam(":telefone", $this->telefone);
-        $stmt->bindParam(":unidade", $this->unidade);
-        $stmt->bindParam(":cep", $this->cep);
-        $stmt->bindParam(":cidade", $this->cidade);
-        $stmt->bindParam(":id", $this->id);
-
-        return $stmt->execute();
+        return $stmt->execute([
+            ':nome' => $this->nome,
+            ':email' => $this->email,
+            ':cargo' => $this->cargo,
+            ':telefone' => $this->telefone,
+            ':unidade' => $this->unidade,
+            ':cep' => $this->cep,
+            ':cidade' => $this->cidade,
+            ':id' => $this->id,
+        ]);
     }
 
-    // DELETE
-    public function delete($id)
+    public function delete($id): bool
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+        $query = "
+            DELETE FROM {$this->table_name}
+            WHERE id = :id
+        ";
+
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":id", $id);
-        return $stmt->execute();
+
+        return $stmt->execute([
+            ':id' => $id,
+        ]);
     }
 
-    // LOGIN
-    public function login($email, $password)
+    public function login(string $email, string $password)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE email = :email LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":email", $email);
-        $stmt->execute();
+        $query = "
+            SELECT *
+            FROM {$this->table_name}
+            WHERE LOWER(email) = LOWER(:email)
+            LIMIT 1
+        ";
 
-        if ($stmt->rowCount() > 0) {
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($password == $row['senha']) {
-                return $row;
-            }
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->execute([
+            ':email' => trim($email),
+        ]);
+
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$usuario) {
+            return false;
         }
-        return false;
+
+        $senhaValida = password_verify(
+            $password,
+            $usuario['senha']
+        );
+
+        /*
+         * Compatibilidade temporária para usuários antigos
+         * que ainda possuem a senha salva em texto puro.
+         */
+        if (!$senhaValida && hash_equals((string) $usuario['senha'], $password)) {
+            $senhaValida = true;
+
+            $this->atualizarSenhaHash(
+                $usuario['id'],
+                $password
+            );
+        }
+
+        if (!$senhaValida) {
+            return false;
+        }
+
+        unset($usuario['senha']);
+
+        return $usuario;
     }
+
+    private function atualizarSenhaHash($id, string $password): void
+    {
+        $query = "
+            UPDATE {$this->table_name}
+            SET senha = :senha
+            WHERE id = :id
+        ";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->execute([
+            ':senha' => password_hash($password, PASSWORD_BCRYPT),
+            ':id' => $id,
+        ]);
+    }
+
     public function getEstatisticas($id)
     {
-        $query = "SELECT 
-                (SELECT SUM(horimetro_final - horimetro_inicial) FROM registros 
-                 WHERE usuario_id = :id AND EXTRACT(MONTH FROM data) = EXTRACT(MONTH FROM CURRENT_DATE)) as horas_mes,
-                (SELECT COUNT(*) FROM registros WHERE usuario_id = :id) as total_registros,
-                (SELECT COUNT(DISTINCT maquina_id) FROM registros WHERE usuario_id = :id) as total_maquinas";
+        $query = "
+            SELECT
+                (
+                    SELECT COALESCE(
+                        SUM(horimetro_final - horimetro_inicial),
+                        0
+                    )
+                    FROM registros
+                    WHERE usuario_id = :id
+                      AND EXTRACT(MONTH FROM data) =
+                          EXTRACT(MONTH FROM CURRENT_DATE)
+                      AND EXTRACT(YEAR FROM data) =
+                          EXTRACT(YEAR FROM CURRENT_DATE)
+                ) AS horas_mes,
+
+                (
+                    SELECT COUNT(*)
+                    FROM registros
+                    WHERE usuario_id = :id
+                ) AS total_registros,
+
+                (
+                    SELECT COUNT(DISTINCT maquina_id)
+                    FROM registros
+                    WHERE usuario_id = :id
+                ) AS total_maquinas
+        ";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":id", $id);
-        $stmt->execute();
+
+        $stmt->execute([
+            ':id' => $id,
+        ]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
+```
