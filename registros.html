@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Registros — Verda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/registros.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+            <path d="M7 2L12 11H2L7 2Z" fill="white" />
+          </svg>
+        </div>
+        <span class="brand-name">Verda</span>
+      </div>
+      <div class="avatar">--</div>
+    </div>
+    <p class="page-title">Registros</p>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-wrap">
+    <div class="filter-chip active" onclick="setFilter(this,'todos')">Todos</div>
+    <div class="filter-chip" onclick="setFilter(this,'concluido')">Concluídos</div>
+    <div class="filter-chip" onclick="setFilter(this,'pendente')">Pendentes</div>
+    <div class="filter-chip" onclick="setFilter(this,'revisao')">Em revisão</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num green">0</div>
+      <div class="stat-label">Este mês</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num amber">0</div>
+      <div class="stat-label">Pendentes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num blue">0h</div>
+      <div class="stat-label">Horas</div>
+    </div>
+  </div>
+
+  <div class="section-title">Apontamentos recentes</div>
+
+  <div class="list" id="recordList">
+    <!-- O JS preencherá esta lista dinamicamente -->
+    <p style="text-align:center; padding:20px; color:gray;">Carregando registros...</p>
+  </div>
+
+  <!-- FAB (Botão Flutuante) -->
+  <button class="fab" onclick="openModal()" title="Novo registro">
+    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  </button>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="location.href='maquinas.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2">
+        <rect x="2" y="14" width="8" height="7" rx="1" />
+        <rect x="9" y="9" width="6" height="12" rx="1" />
+        <rect x="16" y="4" width="6" height="17" rx="1" />
+      </svg>
+      <span class="nav-label">Máquinas</span>
+    </div>
+    <div class="nav-item active">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M9 11l3 3L22 4" />
+        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+      </svg>
+      <span class="nav-label">Registros</span>
+    </div>
+    <div class="nav-item" onclick="location.href='historico.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 6v6l4 2" />
+      </svg>
+      <span class="nav-label">Histórico</span>
+    </div>
+    <div class="nav-item" onclick="location.href='perfil.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+      <span class="nav-label">Perfil</span>
+    </div>
+  </nav>
+
+  <!-- MODAL NOVO REGISTRO -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeOutside(event)">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Novo Apontamento</div>
+      <div class="modal-sub">Preencha os dados do registro</div>
+
+      <div class="form-field">
+        <label class="form-label">Máquina</label>
+        <select class="form-select" id="selectMaquina"></select>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Obra</label>
+        <select class="form-select" id="selectObra">
+          <option value="">Carregando obras vinculadas...</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Data</label>
+        <input type="date" class="form-input" id="inputData" value="" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Hora início</label>
+          <input type="time" class="form-input" id="inputHoraInicio" value="07:00" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Hora fim</label>
+          <input type="time" class="form-input" id="inputHoraFim" value="17:00" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Horímetro inicial</label>
+          <input type="number" class="form-input" id="inputHorimetroInicial" placeholder="0" step="any" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Horímetro final</label>
+          <input type="number" class="form-input" id="inputHorimetroFinal" placeholder="0" step="any" />
+        </div>
+      </div>
+
+      <button class="btn-submit" onclick="salvarNovoRegistro()">Salvar Registro</button>
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+
+  <script>
+    // Funções de interface nativas
+    function openModal() {
+      document.getElementById('inputData').value = new Date().toISOString().split('T')[0];
+      document.getElementById('modalOverlay').classList.add('open');
+    }
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+    }
+    function closeOutside(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+    function setFilter(el, status) {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      document.querySelectorAll('.record-card').forEach(card => {
+        card.style.display = (status === 'todos' || card.dataset.status === status) ? 'block' : 'none';
+      });
+    }
+  </script>
+
+  <script src="js/auth.js"></script>
+  <script src="js/SyncService.js"></script>
+  <script src="js/registros.js"></script>
+  
+  <div class="toast" id="toast" style="display: none;">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path d="M20 6L9 17l-5-5" />
+    </svg>
+    <span id="toastMsg">Processando...</span>
+  </div>
+</body>
+
+</html>

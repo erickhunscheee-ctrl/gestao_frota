@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Máquinas — Verda Admin</title>
+    <link rel="stylesheet" href="./css/shared.css" />
+</head>
+
+<body>
+
+    <main class="main">
+        <div class="topbar">
+            <div class="topbar-left">
+                <span class="topbar-title">Máquinas</span>
+                <span class="topbar-sub">Gerenciar frota de máquinas</span>
+            </div>
+            <div class="topbar-right">
+                <div class="date-badge">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <path d="M16 2v4M8 2v4M3 10h18" />
+                    </svg>--/--/----
+                </div>
+                <button class="topbar-btn btn-primary" onclick="openModal('maquina')">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="2.5">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    Nova Máquina
+                </button>
+            </div>
+        </div>
+
+        <div class="page-content fade-in">
+            <div class="card">
+                <div class="filter-row">
+                    <span class="filter-label">Filtrar:</span>
+                    <div class="filter-chip-row">
+                        <div class="fchip active" onclick="filterTable(this,'mq-table','todos')">Todas (0)</div>
+                        <div class="fchip" onclick="filterTable(this,'mq-table','Ativa')">Em uso (0)</div>
+                        <div class="fchip" onclick="filterTable(this,'mq-table','Manutenção')">Manutenção (0)</div>
+                        <div class="fchip" onclick="filterTable(this,'mq-table','Inativa')">Inativa (0)</div>
+                    </div>
+                    <input class="filter-input" style="margin-left:auto;" placeholder="Buscar máquina..."
+                        oninput="searchTable('mq-table',this.value,0)">
+                </div>
+
+                <table class="data-table" id="mq-table">
+                    <thead>
+                        <tr>
+                            <th>Máquina</th>
+                            <th>Código</th>
+                            <th>Modelo</th>
+                            <th>Ano</th>
+                            <th>Status</th>
+                            <th>Obra vinculada</th>
+                            <th>Operador atual</th>
+                            <th>Horímetro</th>
+                            <th>Horas hoje</th>
+                            <th>Consumo L/h</th>
+                            <th>Combustível hoje</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="11" style="text-align:center; padding:40px; color:gray;">Carregando frota...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="./js/auth.js"></script>
+    <script src="./js/shared.js"></script>
+    <script src="./js/d-maquinas.js"></script>
+</body>
+
+</html>

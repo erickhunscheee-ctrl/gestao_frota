@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Minhas Máquinas — Verda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/maquinas.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+            <path d="M7 2L12 11H2L7 2Z" fill="white" />
+          </svg>
+        </div>
+        <span class="brand-name">Verda</span>
+      </div>
+      <div class="avatar">JS</div>
+    </div>
+    <p class="greeting">Olá,</p>
+    <p class="greeting-name">João Silva</p>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <div class="search-box">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+        <circle cx="11" cy="11" r="8" />
+        <path d="M21 21l-4.35-4.35" />
+      </svg>
+      <input type="search" placeholder="Buscar máquina..." id="searchInput" oninput="filterCards()" />
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num green" id="stat-total">0</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num green" id="stat-ativas">0</div>
+      <div class="stat-label">Ativas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num amber" id="stat-outras">0</div>
+      <div class="stat-label">Outras</div>
+    </div>
+  </div>
+
+  <!-- LIST -->
+  <div class="section-title">Minhas Máquinas</div>
+
+  <div class="list" id="machineList">
+    <p style="text-align:center; padding:20px; color:gray;">Carregando frota...</p>
+  </div>
+
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+
+    <div class="nav-item active">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2">
+        <rect x="2" y="14" width="8" height="7" rx="1" />
+        <rect x="9" y="9" width="6" height="12" rx="1" />
+        <rect x="16" y="4" width="6" height="17" rx="1" />
+      </svg>
+      <span class="nav-label">Máquinas</span>
+    </div>
+
+    <div class="nav-item" onclick="location.href='registros.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2">
+        <path d="M9 11l3 3L22 4" />
+        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+      </svg>
+      <span class="nav-label">Registros</span>
+    </div>
+
+    <div class="nav-item" onclick="location.href='historico.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 6v6l4 2" />
+      </svg>
+      <span class="nav-label">Histórico</span>
+    </div>
+
+    <div class="nav-item" onclick="location.href='perfil.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+      <span class="nav-label">Perfil</span>
+    </div>
+
+  </nav>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+    <div class="modal" id="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-thumb" id="modalThumb">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="1.5">
+          <rect x="2" y="14" width="10" height="6" rx="1" />
+          <rect x="12" y="10" width="8" height="10" rx="1" />
+          <path d="M6 14V10l4-4h4" />
+          <circle cx="5" cy="20" r="1.5" />
+          <circle cx="15" cy="20" r="1.5" />
+        </svg>
+      </div>
+      <div id="modalBadge" class="status-badge status-active" style="display:inline-flex;margin-bottom:12px;">Ativa
+      </div>
+      <div class="modal-machine-name" id="modalName">—</div>
+      <div class="modal-machine-code" id="modalCode">—</div>
+
+      <div class="modal-info-row">
+        <div class="modal-info-item">
+          <div class="modal-info-label">Modelo</div>
+          <div class="modal-info-value" id="modalModel">—</div>
+        </div>
+        <div class="modal-info-item">
+          <div class="modal-info-label">Ano</div>
+          <div class="modal-info-value" id="modalYear">—</div>
+        </div>
+        <div class="modal-info-item">
+          <div class="modal-info-label">Local</div>
+          <div class="modal-info-value" id="modalLocal">—</div>
+        </div>
+      </div>
+
+      <button class="btn-start" onclick="startRecord()">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 8v4l3 3" />
+        </svg>
+        Iniciar Apontamento
+      </button>
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+  <script src="js/auth.js"></script>
+  <script src="js/maquinas.js"></script>
+</body>
+
+</html>

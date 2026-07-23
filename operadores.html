@@ -1,0 +1,149 @@
+<div class="view fade-in" id="view-operadores">
+    <div class="card">
+        <div class="filter-row">
+            <span class="filter-label">Filtrar:</span>
+            <div class="filter-chip-row">
+                <div class="fchip active" onclick="filterTable(this,'op-table','todos')">Todos (10)</div>
+                <div class="fchip" onclick="filterTable(this,'op-table','Trabalhando')">Trabalhando (8)</div>
+                <div class="fchip" onclick="filterTable(this,'op-table','Em pausa')">Em pausa (1)</div>
+                <div class="fchip" onclick="filterTable(this,'op-table','Offline')">Offline (1)</div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:8px;">
+                <input class="filter-input" type="text" placeholder="Buscar nome..."
+                    oninput="searchTable('op-table',this.value,0)">
+                <button class="filter-btn" onclick="openModal('operador')">+ Adicionar operador</button>
+            </div>
+        </div>
+        <table class="data-table" id="op-table">
+            <thead>
+                <tr>
+                    <th>Operador</th>
+                    <th>Status</th>
+                    <th>Máquina</th>
+                    <th>Local</th>
+                    <th>Horas hoje</th>
+                    <th>Horas mês</th>
+                    <th>Horímetro</th>
+                    <th>Combustível hoje</th>
+                    <th>Consumo L/h</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-status="Trabalhando">
+                    <td>
+                        <div class="op-row">
+                            <div class="op-av c1">JS</div>
+                            <div>
+                                <div style="font-weight:600">João Silva</div>
+                                <div style="font-size:11px;color:var(--text-muted)">Sênior</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-green">Trabalhando</span></td>
+                    <td><span class="machine-tag">EX-320D</span></td>
+                    <td>Obra Norte</td>
+                    <td><strong>9.5h</strong></td>
+                    <td>148h</td>
+                    <td>4.830</td>
+                    <td>98 L</td>
+                    <td>10.3 L/h</td>
+                </tr>
+                <tr data-status="Trabalhando">
+                    <td>
+                        <div class="op-row">
+                            <div class="op-av c2">MR</div>
+                            <div>
+                                <div style="font-weight:600">Marcos Rocha</div>
+                                <div style="font-size:11px;color:var(--text-muted)">Pleno</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-green">Trabalhando</span></td>
+                    <td><span class="machine-tag">TR-014</span></td>
+                    <td>Obra Norte</td>
+                    <td><strong>8.0h</strong></td>
+                    <td>132h</td>
+                    <td>2.110</td>
+                    <td>82 L</td>
+                    <td>10.3 L/h</td>
+                </tr>
+                <tr data-status="Trabalhando">
+                    <td>
+                        <div class="op-row">
+                            <div class="op-av c3">LA</div>
+                            <div>
+                                <div style="font-weight:600">Lucas Alves</div>
+                                <div style="font-size:11px;color:var(--text-muted)">Pleno</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-green">Trabalhando</span></td>
+                    <td><span class="machine-tag">MN-825</span></td>
+                    <td>Pátio Central</td>
+                    <td><strong>7.5h</strong></td>
+                    <td>125h</td>
+                    <td>3.448</td>
+                    <td>64 L</td>
+                    <td>8.5 L/h</td>
+                </tr>
+                <tr data-status="Trabalhando">
+                    <td>
+                        <div class="op-row">
+                            <div class="op-av c4">PC</div>
+                            <div>
+                                <div style="font-weight:600">Pedro Costa</div>
+                                <div style="font-size:11px;color:var(--text-muted)">Pleno</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-green">Trabalhando</span></td>
+                    <td><span class="machine-tag">CP-213</span></td>
+                    <td>Pátio Central</td>
+                    <td><strong>6.0h</strong></td>
+                    <td>110h</td>
+                    <td>5.220</td>
+                    <td>42 L</td>
+                    <td>7.0 L/h</td>
+                </tr>
+                <tr data-status="Em pausa">
+                    <td>
+                        <div class="op-row">
+                            <div class="op-av c5">RL</div>
+                            <div>
+                                <div style="font-weight:600">Rafael Lima</div>
+                                <div style="font-size:11px;color:var(--text-muted)">Pleno</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-amber">Em pausa</span></td>
+                    <td><span class="machine-tag">RE-416F</span></td>
+                    <td>Obra Norte</td>
+                    <td><strong>4.5h</strong></td>
+                    <td>98h</td>
+                    <td>1.880</td>
+                    <td>26 L</td>
+                    <td>5.8 L/h</td>
+                </tr>
+                <tr data-status="Offline">
+                    <td>
+                        <div class="op-row">
+                            <div class="op-av c7">CS</div>
+                            <div>
+                                <div style="font-weight:600">Carlos Souza</div>
+                                <div style="font-size:11px;color:var(--text-muted)">Júnior</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-gray">Offline</span></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>0h</td>
+                    <td>88h</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

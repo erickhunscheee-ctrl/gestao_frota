@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Obras ? Verda Admin</title>
+    <link rel="stylesheet" href="./css/shared.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        /* ?? Obras-specific ?? */
+        .obra-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: box-shadow 0.15s;
+        }
+
+        .obra-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .obra-header {
+            padding: 18px 20px 16px;
+            position: relative;
+        }
+
+        .obra-badge-code {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .obra-title-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .obra-location {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 3px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .obra-status-badge {
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid;
+        }
+
+        .obra-dates-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .obra-date-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+
+        .obra-date-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.45);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .obra-date-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .obra-body {
+            padding: 16px 20px;
+        }
+
+        .obra-progress-bar {
+            height: 7px;
+            background: var(--bg);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .obra-progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .obra-progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .obra-cost-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .obra-cost-item {
+            border-radius: var(--radius-md);
+            padding: 10px;
+            border: 1px solid;
+        }
+
+        .obra-cost-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 3px;
+        }
+
+        .obra-cost-value {
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .obra-links-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .obra-link-col-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 6px;
+        }
+
+        .obra-avatars {
+            display: flex;
+        }
+
+        .obra-av {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            border: 2px solid #fff;
+            margin-right: -6px;
+        }
+
+        .obra-tags {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .obra-btn-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* DETAIL PANEL */
+        .detail-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 51, 40, 0.55);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .detail-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .detail-panel {
+            background: var(--white);
+            width: 560px;
+            max-width: 95vw;
+            height: 100vh;
+            overflow-y: auto;
+            transform: translateX(40px);
+            transition: transform 0.28s cubic-bezier(.32, .72, 0, 1);
+            box-shadow: -20px 0 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .detail-overlay.open .detail-panel {
+            transform: translateX(0);
+        }
+
+        .detail-hero {
+            padding: 28px 28px 24px;
+        }
+
+        .detail-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.8);
+            transition: background 0.15s;
+        }
+
+        .detail-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .detail-body {
+            padding: 24px 28px;
+        }
+
+        .detail-section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 10px;
+        }
+
+        .detail-section-title:first-child {
+            margin-top: 0;
+        }
+
+        .detail-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .detail-info-item {
+            background: var(--bg);
+            border-radius: var(--radius-md);
+            padding: 12px;
+        }
+
+        .dii-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+
+        .dii-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+        }
+
+        .detail-table th {
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .detail-table td {
+            padding: 9px 10px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .detail-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .detail-table tr:hover td {
+            background: var(--green-pale);
+        }
+
+        .map-placeholder {
+            height: 180px;
+            background: var(--bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            gap: 8px;
+            margin-bottom: 4px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .coord-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .coord-badge {
+            background: var(--green-pale);
+            border: 1px solid var(--green-light);
+            border-radius: var(--radius-sm);
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--green-dark);
+            font-family: monospace;
+        }
+
+        /* FINALIZED OVERLAY */
+        .finalizada-banner {
+            background: linear-gradient(135deg, #1F2937, #374151);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .finalizada-banner svg {
+            flex-shrink: 0;
+        }
+
+        .finalizada-banner-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .finalizada-banner-sub {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="main">
+        <div class="topbar">
+            <div class="topbar-left">
+                <span class="topbar-title">Obras</span>
+                <span class="topbar-sub">Cadastro, consulta e gestão de obras</span>
+            </div>
+            <div class="topbar-right">
+                <div class="date-badge" id="obras-date">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <path d="M16 2v4M8 2v4M3 10h18" />
+                    </svg>
+                    Carregando...
+                </div>
+                <button class="topbar-btn btn-outline" onclick="openModal('obra')">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="2.5">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    Nova Obra
+                </button>
+                <button class="topbar-btn btn-primary" onclick="openModal('vincular')">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+                    </svg>
+                    Vincular Recursos
+                </button>
+            </div>
+        </div>
+
+        <div class="page-content fade-in">
+
+            <!-- KPIs -->
+            <div class="kpi-grid" style="grid-template-columns:repeat(5,1fr);">
+                <div class="kpi-card green">
+                    <div class="kpi-icon green"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"
+                            stroke="#1D9E75" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg></div>
+                    <div class="kpi-label">Obras ativas</div>
+                    <div class="kpi-value" id="kpi-obras-ativas">0</div>
+                    <div class="kpi-trend trend-up">em andamento</div>
+                </div>
+                <div class="kpi-card dark">
+                    <div class="kpi-icon dark"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"
+                            stroke="#1D9E75" stroke-width="2">
+                            <path d="M9 11l3 3L22 4" />
+                            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                        </svg></div>
+                    <div class="kpi-label">Obras finalizadas</div>
+                    <div class="kpi-value" id="kpi-obras-finalizadas">0</div>
+                    <div class="kpi-trend trend-eq">encerrada</div>
+                </div>
+                <div class="kpi-card blue">
+                    <div class="kpi-icon blue"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"
+                            stroke="#3B82F6" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 6v6l4 2" />
+                        </svg></div>
+                    <div class="kpi-label">Total de horas</div>
+                    <div class="kpi-value" id="kpi-obras-horas">0h</div>
+                    <div class="kpi-trend trend-up">todas as obras</div>
+                </div>
+                <div class="kpi-card amber">
+                    <div class="kpi-icon amber"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"
+                            stroke="#F59E0B" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23" />
+                            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+                        </svg></div>
+                    <div class="kpi-label">Custo total geral</div>
+                    <div class="kpi-value" id="kpi-obras-custo">R$ 0</div>
+                    <div class="kpi-trend trend-down">combustível + M.O.</div>
+                </div>
+                <div class="kpi-card blue">
+                    <div class="kpi-icon blue"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"
+                            stroke="#3B82F6" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+                        </svg></div>
+                    <div class="kpi-label">Operadores vinculados</div>
+                    <div class="kpi-value" id="kpi-obras-operadores">0</div>
+                    <div class="kpi-trend trend-eq">em 2 obras ativas</div>
+                </div>
+            </div>
+
+            <!-- FILTER BAR -->
+            <div class="card" style="margin-bottom:18px;">
+                <div class="filter-row" style="border-bottom:none;">
+                    <span class="filter-label">Status:</span>
+                    <div class="filter-chip-row">
+                        <div class="fchip active" onclick="filterObrasPage(this,'todas')">Todas</div>
+                        <div class="fchip" onclick="filterObrasPage(this,'ativa')">Em andamento</div>
+                        <div class="fchip" onclick="filterObrasPage(this,'finalizada')">Finalizadas</div>
+                        <div class="fchip" onclick="filterObrasPage(this,'planejada')">Planejadas</div>
+                    </div>
+                    <input class="filter-input" style="margin-left:auto;" placeholder="Buscar obra..."
+                        oninput="searchObrasPage(this.value)">
+                </div>
+            </div>
+
+            <!-- OBRAS GRID -->
+            <div id="obras-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:18px;">
+
+                <!-- ?? OBRA 1: ATIVA ?? -->
+                <div data-obra-wrap>
+                    <div class="obra-card" data-status="ativa" data-search="obra norte ob-001 lajeado">
+                        <div class="obra-header" style="background:var(--green-dark);">
+                            <div
+                                style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+                                <div>
+                                    <div class="obra-badge-code" style="color:var(--green-mid);">OB-001</div>
+                                    <div class="obra-title-name">Obra Norte</div>
+                                    <div class="obra-location">
+                                        <svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                            <circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                        Av. das Nações, 1200 ? Lajeado/RS
+                                    </div>
+                                </div>
+                                <span class="obra-status-badge"
+                                    style="background:rgba(29,158,117,0.22);border-color:rgba(29,158,117,0.4);color:#9FE1CB;">Em
+                                    andamento</span>
+                            </div>
+                            <div class="obra-dates-grid">
+                                <div class="obra-date-item">
+                                    <div class="obra-date-label">Início</div>
+                                    <div class="obra-date-value">01/01/2026</div>
+                                </div>
+                                <div class="obra-date-item">
+                                    <div class="obra-date-label">Prazo</div>
+                                    <div class="obra-date-value">15/09/2026</div>
+                                </div>
+                                <div class="obra-date-item">
+                                    <div class="obra-date-label">Progresso</div>
+                                    <div class="obra-date-value">26.7%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="obra-body">
+                            <div style="margin-bottom:14px;">
+                                <div class="obra-progress-labels"><span>1.280h realizadas</span><span>4.800h meta</span>
+                                </div>
+                                <div class="obra-progress-bar">
+                                    <div class="obra-progress-fill" style="width:26.7%;background:var(--green-main);">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="obra-cost-grid">
+                                <div class="obra-cost-item"
+                                    style="background:var(--green-pale);border-color:var(--green-light);">
+                                    <div class="obra-cost-label">Combustível</div>
+                                    <div class="obra-cost-value" style="color:var(--green-dark);">R$ 36.400</div>
+                                </div>
+                                <div class="obra-cost-item"
+                                    style="background:var(--green-pale);border-color:var(--green-light);">
+                                    <div class="obra-cost-label">Mão de obra</div>
+                                    <div class="obra-cost-value" style="color:var(--green-dark);">R$ 89.600</div>
+                                </div>
+                                <div class="obra-cost-item"
+                                    style="background:var(--green-pale);border-color:var(--green-light);">
+                                    <div class="obra-cost-label">Total até agora</div>
+                                    <div class="obra-cost-value" style="color:var(--green-dark);">R$ 126.000</div>
+                                </div>
+                            </div>
+                            <div class="obra-links-grid">
+                                <div>
+                                    <div class="obra-link-col-title">Operadores (5)</div>
+                                    <div class="obra-avatars">
+                                        <div class="obra-av c1" style="z-index:5">JS</div>
+                                        <div class="obra-av c2" style="z-index:4">MR</div>
+                                        <div class="obra-av c3" style="z-index:3">LA</div>
+                                        <div class="obra-av c4" style="z-index:2">PC</div>
+                                        <div class="obra-av c5" style="z-index:1">RL</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="obra-link-col-title">Máquinas (3)</div>
+                                    <div class="obra-tags">
+                                        <span class="machine-tag" style="font-size:10px;">EX-320D · Escavadeira</span>
+                                        <span class="machine-tag" style="font-size:10px;">TR-014 · Trator</span>
+                                        <span class="machine-tag" style="font-size:10px;">MN-825 · Motoniveladora</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="obra-btn-row">
+                                <button class="topbar-btn btn-outline"
+                                    style="flex:1;justify-content:center;font-size:12px;height:34px;"
+                                    onclick="openDetail('ob1')">
+                                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="11" cy="11" r="8" />
+                                        <path d="M21 21l-4.35-4.35" />
+                                    </svg>
+                                    Ver detalhes
+                                </button>
+                                <button class="topbar-btn btn-outline"
+                                    style="flex:1;justify-content:center;font-size:12px;height:34px;"
+                                    onclick="openModal('vincular','OB-001','Obra Norte')">
+                                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                                    </svg>
+                                    Vincular
+                                </button>
+                                <button class="topbar-btn btn-primary"
+                                    style="flex:1;justify-content:center;font-size:12px;height:34px;"
+                                    onclick="window.location.href='d-projecao.html'">
+                                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                                    </svg>
+                                    Projeção
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ?? OBRA 2: ATIVA ?? -->
+                <div data-obra-wrap>
+                    <div class="obra-card" data-status="ativa" data-search="pátio central ob-002 estrela">
+                        <div class="obra-header" style="background:linear-gradient(135deg,#1a4a6e,#1E3A5F);">
+                            <div
+                                style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+                                <div>
+                                    <div class="obra-badge-code" style="color:#93C5FD;">OB-002</div>
+                                    <div class="obra-title-name">Pátio Central</div>
+                                    <div class="obra-location">
+                                        <svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                            <circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                        Rod. RS-130, km 12 ? Estrela/RS
+                                    </div>
+                                </div>
+                                <span class="obra-status-badge"
+                                    style="background:rgba(59,130,246,0.22);border-color:rgba(59,130,246,0.4);color:#93C5FD;">Em
+                                    andamento</span>
+                            </div>
+                            <div class="obra-dates-grid">
+                                <div class="obra-date-item">
+                                    <div class="obra-date-label">Início</div>
+                                    <div class="obra-date-value">15/02/2026</div>
+                                </div>
+                                <div class="obra-date-item">
+                                    <div class="obra-date-label">Prazo</div>
+                                    <div class="obra-date-value">30/11/2026</div>
+                                </div>
+                                <div class="obra-date-item">
+                                    <div class="obra-date-label">Progresso</div>
+                                    <div class="obra-date-value">18.4%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="obra-body">
+                            <div style="margin-bottom:14px;">
+                                <div class="obra-progress-labels"><span>920h realizadas</span><span>5.000h meta</span>
+                                </div>
+                                <div class="obra-progress-bar">
+                                    <div class="obra-progress-fill" style="width:18.4%;background:var(--blue);"></div>
+                                </div>
+                            </div>
+                            <div class="obra-cost-grid">
+                                <div class="obra-cost-item" style="background:#EFF6FF;border-color:#BFDBFE;">
+                                    <div class="obra-cost-label">Combustível</div>
+                                    <div class="obra-cost-value" style="color:#1E40AF;">R$ 22.080</div>
+                                </div>
+                                <div class="obra-cost-item" style="background:#EFF6FF;border-color:#BFDBFE;">
+                                    <div class="obra-cost-label">Mão de obra</div>
+                                    <div class="obra-cost-value" style="color:#1E40AF;">R$ 57.500</div>
+                                </div>
+                                <div class="obra-cost-item" style="background:#EFF6FF;border-color:#BFDBFE;">
+                                    <div class="obra-cost-label">Total até agora</div>
+                                    <div class="obra-cost-value" style="color:#1E40AF;">R$ 79.580</div>
+                                </div>
+                            </div>
+                            <div class="obra-links-grid">
+                                <div>
+                                    <div class="obra-link-col-title">Operadores (3)</div>
+                                    <div class="obra-avatars">
+                                        <div class="obra-av c4" style="z-index:3">PC</div>
+                                        <div class="obra-av c3" style="z-index:2">LA</div>
+                                        <div class="obra-av c7" style="z-index:1">CS</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="obra-link-col-title">Máquinas (2)</div>
+                                    <div class="obra-tags">
+                                        <span class="machine-tag" style="font-size:10px;">CP-213 · Compactador</span>
+                                        <span class="machine-tag" style="font-size:10px;">RE-416F ·
+                                            Retroescavadeira</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="obra-btn-row">
+                                <button class="topbar-btn btn-outline"
+                                    style="flex:1;justify-content:center;font-size:12px;height:34px;"
+                                    onclick="openDetail('ob2')">
+                                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="11" cy="11" r="8" />
+                                        <path d="M21 21l-4.35-4.35" />
+                                    </svg>
+                                    Ver detalhes
+                                </button>
+                                <button class="topbar-btn btn-outline"
+                                    style="flex:1;justify-content:center;font-size:12px;height:34px;"
+                                    onclick="openModal('vincular','OB-002','Pátio Central')">
+                                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                                    </svg>
+                                    Vincular
+                                </button>
+                                <button class="topbar-btn btn-primary"
+                                    style="flex:1;justify-content:center;font-size:12px;height:34px;"
+                                    onclick="window.location.href='d-projecao.html'">
+                                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                                    </svg>
+                                    Projeção
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ?? OBRA 3: FINALIZADA ?? -->
+                <div data-obra-wrap>
+                    <div class="obra-card" data-status="finalizada"
+                        data-search="terraplanagem sul ob-000 lajeado finalizada" style="opacity:0.88;">
+                        <div class="obra-header" style="background:linear-gradient(135deg,#374151,#1F2937);">
+                            <div
+                                style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+                                <div>
+                                    <div class="obra-badge-code" style="color:#9CA3AF;">OB-000</div>
+                                    <div class="obra-title-name">Terraplanagem Sul</div>
+                                    <div class="obra-location">
+                                        <svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                            <circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                        R. Três de Outubro, 450 ? Lajeado/RS
+                                    </div>
+                                </div>
+                                <span class="obra-status-badge"
+                                    style="background:rgba(156,163,175,0.15);border-color:rgba(156,163,175,0.25);color:#9CA3AF;">Finalizada
+                                    ?</span>
+                            </div>
+                            <div class="obra-dates-grid">
+                                <div class="obra-date-item">
+                                    <div class="obra-date-label">Início</div>
+                                    <div class="obra-date-value">01/07/2025</div>
+                                </div>
+                                <div class="obra-date-item">
+                                    <div class="obra-date-label">Concluída</div>
+                                    <div class="obra-date-value">28/12/2025</div>
+                                </div>
+                                <div class="obra-date-item">
+                                    <div class="obra-date-label">Conclusão</div>
+                                    <div class="obra-date-value" style="color:#4ADE80;">100% ?</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="obra-body">
+                            <div class="finalizada-banner">
+                                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#4ADE80"
+                                    stroke-width="2">
+                                    <path d="M9 11l3 3L22 4" />
+                                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                                </svg>
+                                <div>
+                                    <div class="finalizada-banner-text">Obra concluída com sucesso</div>
+                                    <div class="finalizada-banner-sub">Encerrada em 28/12/2025 · Duração: 180 dias</div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom:14px;">
+                                <div class="obra-progress-labels"><span>2.620h realizadas (superou meta em
+                                        20h)</span><span>Meta: 2.600h</span></div>
+                                <div class="obra-progress-bar">
+                                    <div class="obra-progress-fill"
+                                        style="width:100%;background:linear-gradient(90deg,#4ADE80,#1D9E75);"></div>
+                                </div>
+                            </div>
+                            <div class="obra-cost-grid">
+                                <div class="obra-cost-item" style="background:#F8FAFC;border-color:var(--border);">
+                                    <div class="obra-cost-label">Combustível</div>
+                                    <div class="obra-cost-value" style="color:var(--text-primary);">R$ 24.300</div>
+                                </div>
+                                <div class="obra-cost-item" style="background:#F8FAFC;border-color:var(--border);">
+                                    <div class="obra-cost-label">Mão de obra</div>
+                                    <div class="obra-cost-value" style="color:var(--text-primary);">R$ 18.120</div>
+                                </div>
+                                <div class="obra-cost-item" style="background:#F8FAFC;border-color:var(--border);">
+                                    <div class="obra-cost-label">Custo total final</div>
+                                    <div class="obra-cost-value" style="color:var(--text-primary);">R$ 42.420</div>
+                                </div>
+                            </div>
+                            <div class="obra-btn-row">
+                                <button class="topbar-btn btn-outline"
+                                    style="flex:1;justify-content:center;font-size:12px;height:34px;"
+                                    onclick="openDetail('ob0')">
+                                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="11" cy="11" r="8" />
+                                        <path d="M21 21l-4.35-4.35" />
+                                    </svg>
+                                    Ver relatório final
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /obras-grid -->
+
+            <!-- CHART COMPARISON -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Comparativo de custos por obra</div>
+                        <div class="card-sub">Combustível vs mão de obra</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="obrasChart" height="140"></canvas>
+                </div>
+            </div>
+
+        </div><!-- /page-content -->
+    </main>
+
+
+    <!-- ??? DETAIL PANEL ??? -->
+    <div class="detail-overlay" id="detailOverlay" onclick="closeDetailOutside(event)">
+        <div class="detail-panel" id="detailPanel">
+            <!-- injected by JS -->
+        </div>
+    </div>
+
+
+    <script src="./js/auth.js"></script>
+    <script src="./js/shared.js"></script>
+    <script>
+        Chart.defaults.font.family = "'Montserrat', sans-serif";
+        Chart.defaults.font.size = 11;
+
+        new Chart(document.getElementById('obrasChart'), {
+            type: 'bar',
+            data: {
+                labels: ['OB-001 · Obra Norte', 'OB-002 · Pátio Central', 'OB-000 · Terraplanagem Sul'],
+                datasets: [
+                    { label: 'Combustível (R$)', data: [36400, 22080, 24300], backgroundColor: '#1D9E75', borderRadius: 4 },
+                    { label: 'Mão de obra (R$)', data: [89600, 57500, 18120], backgroundColor: 'rgba(29,158,117,0.25)', borderRadius: 4 }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { color: '#6b7270', boxWidth: 10, padding: 14 } } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#6b7270' } },
+                    y: { grid: { color: '#f0f4f2' }, ticks: { color: '#6b7270', callback: v => 'R$ ' + (v / 1000).toFixed(0) + 'k' } }
+                }
+            }
+        });
+
+        /* ?? FILTERS ?? */
+        function filterObrasPage(el, status) {
+            el.closest('.filter-chip-row').querySelectorAll('.fchip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            document.querySelectorAll('[data-obra-wrap]').forEach(wrap => {
+                const card = wrap.querySelector('.obra-card');
+                wrap.style.display = (status === 'todas' || card.dataset.status === status) ? '' : 'none';
+            });
+        }
+
+        function searchObrasPage(q) {
+            q = q.toLowerCase();
+            document.querySelectorAll('[data-obra-wrap]').forEach(wrap => {
+                const card = wrap.querySelector('.obra-card');
+                wrap.style.display = card.dataset.search.includes(q) ? '' : 'none';
+            });
+        }
+
+        /* ?? DETAIL PANEL DATA ?? */
+        const OBRAS_DATA = {
+            ob0: {
+                code: 'OB-000', name: 'Terraplanagem Sul', status: 'Finalizada',
+                headerBg: 'linear-gradient(135deg,#374151,#1F2937)', badgeColor: '#9CA3AF', badgeBg: 'rgba(156,163,175,0.15)',
+                address: 'R. Três de Outubro, 450', city: 'Lajeado/RS', lat: '-29.4521', lng: '-51.9601',
+                client: 'Construtora Horizonte Ltda', start: '01/07/2025', end: '28/12/2025', prazo: '28/12/2025',
+                metaH: '2.600', doneH: '2.620', pct: '100%',
+                fuelCost: 'R$ 24.300', labCost: 'R$ 18.120', totalCost: 'R$ 42.420',
+                operators: [
+                    { av: 'JS', color: 'c1', name: 'João Silva', role: 'Sênior', hours: '520h' },
+                    { av: 'MR', color: 'c2', name: 'Marcos Rocha', role: 'Pleno', hours: '490h' },
+                ],
+                machines: [
+                    { code: 'EX-320D', name: 'Escavadeira 320D', hours: '1.040h', fuel: '10.3 L/h' },
+                    { code: 'TR-014', name: 'Trator TD14', hours: '900h', fuel: '10.3 L/h' },
+                ],
+            },
+            ob1: {
+                code: 'OB-001', name: 'Obra Norte', status: 'Em andamento',
+                headerBg: 'var(--green-dark)', badgeColor: '#9FE1CB', badgeBg: 'rgba(29,158,117,0.22)',
+                address: 'Av. das Nações, 1200', city: 'Lajeado/RS', lat: '-29.4674', lng: '-51.9618',
+                client: 'Prefeitura de Lajeado', start: '01/01/2026', end: '?', prazo: '15/09/2026',
+                metaH: '4.800', doneH: '1.280', pct: '26.7%',
+                fuelCost: 'R$ 36.400', labCost: 'R$ 89.600', totalCost: 'R$ 126.000',
+                operators: [
+                    { av: 'JS', color: 'c1', name: 'João Silva', role: 'Sênior', hours: '148h' },
+                    { av: 'MR', color: 'c2', name: 'Marcos Rocha', role: 'Pleno', hours: '132h' },
+                    { av: 'LA', color: 'c3', name: 'Lucas Alves', role: 'Pleno', hours: '125h' },
+                    { av: 'PC', color: 'c4', name: 'Pedro Costa', role: 'Pleno', hours: '110h' },
+                    { av: 'RL', color: 'c5', name: 'Rafael Lima', role: 'Pleno', hours: '98h' },
+                ],
+                machines: [
+                    { code: 'EX-320D', name: 'Escavadeira 320D', hours: '4.830h', fuel: '10.3 L/h' },
+                    { code: 'TR-014', name: 'Trator TD14', hours: '2.110h', fuel: '10.3 L/h' },
+                    { code: 'MN-825', name: 'Motoniveladora GD825', hours: '3.448h', fuel: '8.5 L/h' },
+                ],
+            },
+            ob2: {
+                code: 'OB-002', name: 'Pátio Central', status: 'Em andamento',
+                headerBg: 'linear-gradient(135deg,#1a4a6e,#1E3A5F)', badgeColor: '#93C5FD', badgeBg: 'rgba(59,130,246,0.22)',
+                address: 'Rod. RS-130, km 12', city: 'Estrela/RS', lat: '-29.5012', lng: '-51.9540',
+                client: 'Empresa B&R Construções', start: '15/02/2026', end: '?', prazo: '30/11/2026',
+                metaH: '5.000', doneH: '920', pct: '18.4%',
+                fuelCost: 'R$ 22.080', labCost: 'R$ 57.500', totalCost: 'R$ 79.580',
+                operators: [
+                    { av: 'PC', color: 'c4', name: 'Pedro Costa', role: 'Pleno', hours: '110h' },
+                    { av: 'LA', color: 'c3', name: 'Lucas Alves', role: 'Pleno', hours: '125h' },
+                    { av: 'CS', color: 'c7', name: 'Carlos Souza', role: 'Júnior', hours: '88h' },
+                ],
+                machines: [
+                    { code: 'CP-213', name: 'Compactador CV213', hours: '5.220h', fuel: '7.0 L/h' },
+                    { code: 'RE-416F', name: 'Retroescavadeira 416F', hours: '1.880h', fuel: '5.8 L/h' },
+                ],
+            },
+        };
+
+        function openDetail(id) {
+            const o = OBRAS_DATA[id];
+            if (!o) return;
+
+            const operatorsRows = o.operators.map(op =>
+                `<tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="op-av ${op.color}" style="width:26px;height:26px;font-size:9px;">${op.av}</div><div><div style="font-weight:600;">${op.name}</div><div style="font-size:11px;color:var(--text-muted);">${op.role}</div></div></div></td><td>${op.hours}</td></tr>`
+            ).join('');
+
+            const machinesRows = o.machines.map(m =>
+                `<tr><td><span class="machine-tag" style="font-size:11px;">${m.code}</span></td><td style="font-weight:600;">${m.name}</td><td>${m.hours}</td><td>${m.fuel}</td></tr>`
+            ).join('');
+
+            document.getElementById('detailPanel').innerHTML = `
+      <div style="position:relative;background:${o.headerBg};padding:28px 28px 24px;">
+        <button class="detail-close" onclick="closeDetail()">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div style="font-size:11px;font-weight:600;color:${o.badgeColor};text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">${o.code}</div>
+        <div style="font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;">${o.name}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:14px;">${o.address} ? ${o.city}</div>
+        <span style="background:${o.badgeBg};border:1px solid ${o.badgeColor}33;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:${o.badgeColor};">${o.status}</span>
+      </div>
+
+      <div class="detail-body">
+
+        <div class="detail-section-title">Informações gerais</div>
+        <div class="detail-info-grid">
+          <div class="detail-info-item"><div class="dii-label">Cliente</div><div class="dii-value">${o.client}</div></div>
+          <div class="detail-info-item"><div class="dii-label">Progresso</div><div class="dii-value">${o.pct} (${o.doneH}h / ${o.metaH}h)</div></div>
+          <div class="detail-info-item"><div class="dii-label">Data de início</div><div class="dii-value">${o.start}</div></div>
+          <div class="detail-info-item"><div class="dii-label">Prazo / Conclusão</div><div class="dii-value">${o.prazo}</div></div>
+        </div>
+
+        <div class="detail-section-title">Custos até o momento</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px;">
+          <div class="detail-info-item"><div class="dii-label">Combustível</div><div class="dii-value" style="color:var(--amber);">${o.fuelCost}</div></div>
+          <div class="detail-info-item"><div class="dii-label">Mão de obra</div><div class="dii-value" style="color:var(--blue);">${o.labCost}</div></div>
+          <div class="detail-info-item"><div class="dii-label">Total acumulado</div><div class="dii-value" style="color:var(--green-dark);">${o.totalCost}</div></div>
+        </div>
+
+        <div class="detail-section-title">Localização</div>
+        <div class="map-placeholder">
+          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="var(--green-main)" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          ${o.address}, ${o.city}
+        </div>
+        <div class="coord-row" style="margin-bottom:4px;">
+          <span class="coord-badge">Lat: ${o.lat}</span>
+          <span class="coord-badge">Lng: ${o.lng}</span>
+        </div>
+
+        <div class="detail-section-title">Operadores vinculados</div>
+        <table class="detail-table">
+          <thead><tr><th>Operador</th><th>Horas na obra</th></tr></thead>
+          <tbody>${operatorsRows}</tbody>
+        </table>
+
+        <div class="detail-section-title">Máquinas vinculadas</div>
+        <table class="detail-table">
+          <thead><tr><th>Código</th><th>Máquina</th><th>Horímetro</th><th>Consumo</th></tr></thead>
+          <tbody>${machinesRows}</tbody>
+        </table>
+
+        <div style="display:flex;gap:10px;margin-top:20px;">
+          <button class="topbar-btn btn-outline" style="flex:1;justify-content:center;" onclick="openModal('vincular','${o.code}','${o.name}')">Gerenciar vínculos</button>
+          <button class="topbar-btn btn-primary" style="flex:1;justify-content:center;" onclick="window.location.href='d-projecao.html'">Ver projeção</button>
+        </div>
+
+      </div>`;
+
+            document.getElementById('detailOverlay').classList.add('open');
+        }
+
+        function closeDetail() {
+            document.getElementById('detailOverlay').classList.remove('open');
+        }
+
+        function closeDetailOutside(e) {
+            if (e.target === document.getElementById('detailOverlay')) closeDetail();
+        }
+    </script>
+    <script src="./js/d-obras.js"></script>
+</body>
+
+</html>

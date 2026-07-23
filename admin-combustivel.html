@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Combustível - Verda Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/admin-combustivel.css">
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot"><svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+            <path d="M7 2L12 11H2L7 2Z" fill="white" />
+          </svg></div>
+        <span class="brand-name">Verda</span>
+      </div>
+      <span class="admin-badge">ADMIN</span>
+    </div>
+    <p class="page-title">Combustível</p>
+  </div>
+
+  <!-- PERIOD -->
+  <div class="period-wrap">
+    <div class="period-chip active">Hoje</div>
+    <div class="period-chip">Semana</div>
+    <div class="period-chip">Mês</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-icon amber">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#D97706" stroke-width="2">
+          <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.4 5M17 13l1.4 5M9 18h6" />
+        </svg>
+      </div>
+      <span class="kpi-trend trend-down">+8%</span>
+      <div class="kpi-num">312<span>L</span></div>
+      <div class="kpi-label">Total consumido</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1D9E75" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 6v6l4 2" />
+        </svg>
+      </div>
+      <span class="kpi-trend trend-up">ok</span>
+      <div class="kpi-num">64<span>h</span></div>
+      <div class="kpi-label">Horas trabalhadas</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon amber">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#D97706" stroke-width="2">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+        </svg>
+      </div>
+      <span class="kpi-trend trend-down">alt</span>
+      <div class="kpi-num">4.9<span>L/h</span></div>
+      <div class="kpi-label">Média por hora</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon blue">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#3B82F6" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23" />
+          <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+        </svg>
+      </div>
+      <span class="kpi-trend trend-down">est.</span>
+      <div class="kpi-num">R$<span> </span>1.4k</div>
+      <div class="kpi-label">Custo estimado</div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Consumo diário (Ãºltimos 7 dias)</span>
+    </div>
+    <div class="chart-legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#1D9E75"></div>Escavadeira
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#F59E0B"></div>Trator
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#3B82F6"></div>Outros
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <div class="bars">
+        <div class="bar-col">
+          <div class="bar-stack">
+            <div class="bar b1" style="height:26px"></div>
+            <div class="bar b2" style="height:18px"></div>
+            <div class="bar b3" style="height:10px"></div>
+          </div>
+          <div class="bar-day">14</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-stack">
+            <div class="bar b1" style="height:30px"></div>
+            <div class="bar b2" style="height:22px"></div>
+            <div class="bar b3" style="height:14px"></div>
+          </div>
+          <div class="bar-day">15</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-stack">
+            <div class="bar b1" style="height:28px"></div>
+            <div class="bar b2" style="height:20px"></div>
+            <div class="bar b3" style="height:8px"></div>
+          </div>
+          <div class="bar-day">16</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-stack">
+            <div class="bar b1" style="height:0px"></div>
+            <div class="bar b2" style="height:0px"></div>
+            <div class="bar b3" style="height:0px"></div>
+          </div>
+          <div class="bar-day">17</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-stack">
+            <div class="bar b1" style="height:32px"></div>
+            <div class="bar b2" style="height:24px"></div>
+            <div class="bar b3" style="height:16px"></div>
+          </div>
+          <div class="bar-day">18</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-stack">
+            <div class="bar b1" style="height:29px"></div>
+            <div class="bar b2" style="height:21px"></div>
+            <div class="bar b3" style="height:12px"></div>
+          </div>
+          <div class="bar-day">19</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-stack">
+            <div class="bar b1" style="height:34px"></div>
+            <div class="bar b2" style="height:26px"></div>
+            <div class="bar b3" style="height:18px"></div>
+          </div>
+          <div class="bar-day" style="font-weight:600;color:var(--green-main)">20</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FÃRMULA -->
+  <div style="padding: 18px 20px 10px;">
+    <div class="calc-card">
+      <div class="calc-title">Como calculamos o consumo</div>
+      <div class="calc-formula">
+        <strong>Consumo (L)</strong> = Horas trabalhadas - taxa média máquina<br>
+        <strong>Custo (R$)</strong> = Litros - R$ 6,00/L (diesel S-10)
+      </div>
+    </div>
+  </div>
+
+  <!-- RANKING -->
+  <div class="section-title">Ranking por consumo</div>
+
+  <div class="list pb">
+
+    <div class="rank-card">
+      <div class="rank-top">
+        <div class="rank-num r1">1º</div>
+        <div class="rank-info">
+          <div class="rank-name">Escavadeira 320D</div>
+          <div class="rank-model">EX-320D Â· 9.5h trabalhadas</div>
+        </div>
+        <div class="rank-liters">
+          <div class="rank-l-num">98</div>
+          <div class="rank-l-label">litros</div>
+        </div>
+      </div>
+      <div class="rank-bar-wrap">
+        <div class="rank-bar-fill" style="width:100%;background:var(--green-main)"></div>
+      </div>
+      <div class="rank-footer">
+        <span class="rank-meta">Taxa: <span>10.3 L/h</span></span>
+        <span class="rank-meta">Custo: <span>R$ 441,00</span></span>
+        <span class="rank-meta">Operador: <span>J. Silva</span></span>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-top">
+        <div class="rank-num r2">2º</div>
+        <div class="rank-info">
+          <div class="rank-name">Trator TD14</div>
+          <div class="rank-model">TR-014 · 8.0h trabalhadas</div>
+        </div>
+        <div class="rank-liters">
+          <div class="rank-l-num">82</div>
+          <div class="rank-l-label">litros</div>
+        </div>
+      </div>
+      <div class="rank-bar-wrap">
+        <div class="rank-bar-fill" style="width:84%;background:#0F6E56"></div>
+      </div>
+      <div class="rank-footer">
+        <span class="rank-meta">Taxa: <span>10.3 L/h</span></span>
+        <span class="rank-meta">Custo: <span>R$ 369,00</span></span>
+        <span class="rank-meta">Operador: <span>M. Rocha</span></span>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-top">
+        <div class="rank-num r3">3º</div>
+        <div class="rank-info">
+          <div class="rank-name">Motoniveladora GD825</div>
+          <div class="rank-model">MN-825 · 7.5h trabalhadas</div>
+        </div>
+        <div class="rank-liters">
+          <div class="rank-l-num">64</div>
+          <div class="rank-l-label">litros</div>
+        </div>
+      </div>
+      <div class="rank-bar-wrap">
+        <div class="rank-bar-fill" style="width:65%;background:var(--amber)"></div>
+      </div>
+      <div class="rank-footer">
+        <span class="rank-meta">Taxa: <span>8.5 L/h</span></span>
+        <span class="rank-meta">Custo: <span>R$ 288,00</span></span>
+        <span class="rank-meta">Operador: <span>L. Alves</span></span>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-top">
+        <div class="rank-num rn">4º</div>
+        <div class="rank-info">
+          <div class="rank-name">Compactador CV213</div>
+          <div class="rank-model">CP-213 · 6.0h trabalhadas</div>
+        </div>
+        <div class="rank-liters">
+          <div class="rank-l-num">42</div>
+          <div class="rank-l-label">litros</div>
+        </div>
+      </div>
+      <div class="rank-bar-wrap">
+        <div class="rank-bar-fill" style="width:43%;background:var(--blue)"></div>
+      </div>
+      <div class="rank-footer">
+        <span class="rank-meta">Taxa: <span>7.0 L/h</span></span>
+        <span class="rank-meta">Custo: <span>R$ 189,00</span></span>
+        <span class="rank-meta">Operador: <span>P. Costa</span></span>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-top">
+        <div class="rank-num rn">5º</div>
+        <div class="rank-info">
+          <div class="rank-name">Retroescavadeira 416F</div>
+          <div class="rank-model">RE-416F · 4.5h trabalhadas</div>
+        </div>
+        <div class="rank-liters">
+          <div class="rank-l-num">26</div>
+          <div class="rank-l-label">litros</div>
+        </div>
+      </div>
+      <div class="rank-bar-wrap">
+        <div class="rank-bar-fill" style="width:27%;background:var(--purple)"></div>
+      </div>
+      <div class="rank-footer">
+        <span class="rank-meta">Taxa: <span>5.8 L/h</span></span>
+        <span class="rank-meta">Custo: <span>R$ 117,00</span></span>
+        <span class="rank-meta">Operador: <span>R. Lima</span></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="location.href='admin-dashboard.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+      <span class="nav-label">Visão Geral</span>
+    </div>
+    <div class="nav-item" onclick="location.href='admin-operadores.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+      </svg>
+      <span class="nav-label">Operadores</span>
+    </div>
+    <div class="nav-item" onclick="location.href='admin-maquinas.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2">
+        <rect x="2" y="14" width="8" height="7" rx="1" />
+        <rect x="9" y="9" width="6" height="12" rx="1" />
+        <rect x="16" y="4" width="6" height="17" rx="1" />
+      </svg>
+      <span class="nav-label">Máquinas</span>
+    </div>
+    <div class="nav-item active">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.4 5M17 13l1.4 5M9 18h6" />
+      </svg>
+      <span class="nav-label">Combistível</span>
+    </div>
+  </nav>
+  <script src="js/auth.js"></script>
+  <script src="js/admin-combustivel.js"></script>
+</body>
+
+</html>

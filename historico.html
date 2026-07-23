@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Histórico — Verda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/historico.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+            <path d="M7 2L12 11H2L7 2Z" fill="white" />
+          </svg>
+        </div>
+        <span class="brand-name">Verda</span>
+      </div>
+      <div class="avatar">--</div>
+    </div>
+    <p class="page-title">Histórico</p>
+  </div>
+
+  <!-- MONTH SELECTOR -->
+  <div class="month-selector">
+    <button class="month-btn" onclick="changeMonth(-1)">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </button>
+    <span class="month-label" id="monthLabel">Carregando...</span>
+    <button class="month-btn" onclick="changeMonth(1)">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary">
+    <div class="sum-card">
+      <div class="sum-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1D9E75" stroke-width="2"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg></div>
+      <div class="sum-num">0<span>h</span></div>
+      <div class="sum-label">Horas totais</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1D9E75" stroke-width="2"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" /></svg></div>
+      <div class="sum-num">0</div>
+      <div class="sum-label">Apontamentos</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1D9E75" stroke-width="2"><rect x="2" y="14" width="8" height="7" rx="1" /><rect x="9" y="9" width="6" height="12" rx="1" /><rect x="16" y="4" width="6" height="17" rx="1" /></svg></div>
+      <div class="sum-num">0</div>
+      <div class="sum-label">Máquinas usadas</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1D9E75" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg></div>
+      <div class="sum-num">0</div>
+      <div class="sum-label">Dias trabalhados</div>
+    </div>
+  </div>
+
+  <!-- BAR CHART -->
+  <div class="chart-card">
+    <div class="chart-title">Horas por semana</div>
+    <div class="bars" id="barsChart">
+      <div class="bar-col"><div class="bar dim" style="height:5%"></div><div class="bar-day">S1</div></div>
+      <div class="bar-col"><div class="bar dim" style="height:5%"></div><div class="bar-day">S2</div></div>
+      <div class="bar-col"><div class="bar dim" style="height:5%"></div><div class="bar-day">S3</div></div>
+      <div class="bar-col"><div class="bar dim" style="height:5%"></div><div class="bar-day">S4</div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Linha do tempo</div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+      <p style="text-align:center; padding:20px; color:gray;">Carregando histórico...</p>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="location.href='maquinas.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2"><rect x="2" y="14" width="8" height="7" rx="1" /><rect x="9" y="9" width="6" height="12" rx="1" /><rect x="16" y="4" width="6" height="17" rx="1" /></svg>
+      <span class="nav-label">Máquinas</span>
+    </div>
+    <div class="nav-item" onclick="location.href='registros.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" /></svg>
+      <span class="nav-label">Registros</span>
+    </div>
+    <div class="nav-item active">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+      <span class="nav-label">Histórico</span>
+    </div>
+    <div class="nav-item" onclick="location.href='perfil.html'">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6b7270" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+      <span class="nav-label">Perfil</span>
+    </div>
+  </nav>
+
+  <script src="js/auth.js"></script>
+  <script src="js/historico.js"></script>
+</body>
+</html>
