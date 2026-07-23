@@ -227,6 +227,14 @@ window.openDetail = id => {
   document.getElementById('detailOverlay').classList.add('open');
 };
 
+window.closeDetail = () => {
+  document.getElementById('detailOverlay')?.classList.remove('open');
+};
+
+window.closeDetailOutside = e => {
+  if (e.target === document.getElementById('detailOverlay')) window.closeDetail();
+};
+
 function renderizarGrafico() {
   const canvas = document.getElementById('obrasChart'); if (!canvas || typeof Chart === 'undefined') return;
   Chart.getChart(canvas)?.destroy();
