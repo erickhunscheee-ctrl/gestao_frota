@@ -226,12 +226,32 @@ function validarCPF(cpf) {
 }
 
 /* ── MODAL FUNCTIONS ── */
-function openModal(type, ...args) {
+async function carregarObrasDinamicamente() {
+  const selects = document.querySelectorAll('.dynamic-obras');
+  if (selects.length === 0) return;
+  try {
+    const response = await fetch('api/admin/obras/listar.php');
+    const data = await response.json();
+    if (data && data.obras) {
+      const html = '<option value="">— Nenhuma —</option>' + data.obras.map(o => `<option value="${o.id}">${o.codigo} · ${o.nome}</option>`).join('');
+      selects.forEach(sel => {
+        const val = sel.value;
+        sel.innerHTML = html;
+        sel.value = val;
+      });
+    }
+  } catch(e) {}
+}
+
+window.openModal = function(type, ...args) {
   const f = typeof MODAL_FORMS !== 'undefined' && MODAL_FORMS[type] ? MODAL_FORMS[type](...args) : { title: type, sub: '', html: '' };
   document.getElementById('modalTitle').textContent = f.title;
   document.getElementById('modalSub').textContent = f.sub;
   document.getElementById('modalBody').innerHTML = f.html;
   document.getElementById('modalOverlay').classList.add('open');
+  if (type === 'operador' || type === 'maquina') {
+    carregarObrasDinamicamente();
+  }
 }
 
 function closeModal() { const o = document.getElementById('modalOverlay'); if (o) o.classList.remove('open'); }
@@ -282,7 +302,7 @@ const MODAL_FORMS = {
       <div class="form-field"><label class="form-label">CPF</label><input class="form-input" placeholder="000.000.000-00"/></div>
       <div class="form-field"><label class="form-label">Data admissão</label><input class="form-input" type="date"/></div>
       <div class="form-field"><label class="form-label">Máquina padrão</label><select class="form-select"><option>— Nenhuma —</option><option>Escavadeira 320D</option><option>Trator TD14</option><option>Motoniveladora GD825</option><option>Compactador CV213</option><option>Retroescavadeira 416F</option></select></div>
-      <div class="form-field"><label class="form-label">Obra vinculada</label><select class="form-select"><option>— Nenhuma —</option><option>OB-001 · Obra Norte</option><option>OB-002 · Pátio Central</option></select></div>
+      <div class="form-field"><label class="form-label">Obra vinculada</label><select class="form-select dynamic-obras" id="op-unidade"><option value="">Carregando obras...</option></select></div>
     </div>`
   }),
   maquina: () => ({
@@ -296,7 +316,7 @@ const MODAL_FORMS = {
       <div class="form-field"><label class="form-label">Horímetro atual</label><input class="form-input" type="number" placeholder="0"/></div>
       <div class="form-field"><label class="form-label">Consumo médio (L/h)</label><input class="form-input" type="number" step="0.1" placeholder="10.0"/></div>
       <div class="form-field"><label class="form-label">Status</label><select class="form-select"><option>Em uso</option><option>Manutenção</option><option>Inativa</option></select></div>
-      <div class="form-field"><label class="form-label">Obra vinculada</label><select class="form-select"><option>— Nenhuma —</option><option>OB-001 · Obra Norte</option><option>OB-002 · Pátio Central</option></select></div>
+      <div class="form-field"><label class="form-label">Obra vinculada</label><select class="form-select dynamic-obras" id="maq-unidade"><option value="">Carregando obras...</option></select></div>
       <div class="form-field full"><label class="form-label">Observações</label><input class="form-input" placeholder="Informações adicionais..."/></div>
     </div>`
   }),
