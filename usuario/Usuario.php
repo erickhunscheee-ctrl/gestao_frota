@@ -1,4 +1,3 @@
-```php
 <?php
 
 class Usuario
@@ -260,4 +259,3 @@ class Usuario
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
-```
